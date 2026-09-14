@@ -33,6 +33,10 @@ package("libca")
     add_versions("0.0.5", "0a5f1a21d5772614e3cb30c5be3b7c19aa871008") -- sepacker            2026-08-24
     add_versions("0.0.6", "2d005cbbfe2433864177ce29a5e6d5c94b9f61c0") -- can-dbc/can-toolkit 2026-09-03
 
+    -- libca_str 的 format.hpp 在公开头里包含 fmt/core.h，str 以 fmt(header-only)
+    -- 为公开接口依赖——包必须传递声明，消费方才能拿到 fmt 的包含路径。
+    add_deps("fmt", {configs = {header_only = true}})
+
     add_configs("zip", {description = "Enable libca.zip module (pulls zlib).", default = true, type = "boolean"})
     add_configs("spdlog", {description = "Enable spdlog backend for libca.log.", default = false, type = "boolean"})
     add_configs("openssl", {description = "Enable optional OpenSSL HTTPS client.", default = false, type = "boolean"})
