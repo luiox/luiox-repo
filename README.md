@@ -20,7 +20,13 @@ xrepo add-repo luiox-repo https://github.com/luiox/luiox-repo.git
 
 私有仓认证：xmake 对 git URL 直接调用系统 git，SSH key / Windows 凭据管理器 /
 credential helper 自动生效，CI 用 deploy key，与 submodule 时代同源，无额外配置。
-若全局 `.gitconfig` 配置了失效代理，可 `GIT_CONFIG_GLOBAL=/dev/null xmake ...` 绕过。
+若全局 `.gitconfig` 配置了失效代理：公共库可 `GIT_CONFIG_GLOBAL=/dev/null xmake ...`
+绕过；**私有库会连凭据一起丢**，改用注入方式只覆盖代理、保留凭据 helper：
+
+```sh
+GIT_CONFIG_COUNT=2 GIT_CONFIG_KEY_0=http.proxy GIT_CONFIG_VALUE_0= \
+GIT_CONFIG_KEY_1=https.proxy GIT_CONFIG_VALUE_1= xmake ...
+```
 
 ## 可复现纪律
 
