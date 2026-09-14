@@ -8,8 +8,8 @@
 -- 发版/升级：在 libca 仓库定版后，于此文件 add_versions 追加新版本条目
 -- （既有条目只追加不修改，见 README 可复现纪律）；消费项目自行择机升级。
 --
--- 链接说明：add_links 覆盖全部模块库（高层模块在前、core 兜底，静态库
--- 只拉取被引用目标，多链无害）；libca_test 不入默认链接（测试支撑库）。
+-- 链接说明：add_links 覆盖全部模块库（含 libca_test——消费方须自行携带
+-- gtest 包），libca resources/i18n 为 header-only 模块无库可链。
 -- libca 源内系统库依赖走各模块 target 的 add_syslinks（ws2_32/user32/
 -- bcrypt/dbghelp/dl/pthread/rt），不随安装传导，故包定义按平台补齐。
 
@@ -37,12 +37,13 @@ package("libca")
     add_configs("spdlog", {description = "Enable spdlog backend for libca.log.", default = false, type = "boolean"})
     add_configs("openssl", {description = "Enable optional OpenSSL HTTPS client.", default = false, type = "boolean"})
 
-    -- 全模块链接：高层在前、core 兜底（ld 依赖序）；静态库只拉被引用目标，多链无害。
-    add_links("libca_http", "libca_net", "libca_ui", "libca_log", "libca_crypto",
-              "libca_yaml", "libca_toml", "libca_xml", "libca_csv", "libca_json",
-              "libca_ini", "libca_env", "libca_zip", "libca_uuid", "libca_random",
-              "libca_process", "libca_thread", "libca_time", "libca_fs", "libca_io",
-              "libca_str", "libca_opt", "libca_core")
+    -- 全模块链接：libca_test 在前（依赖 gtest+core，消费方须自带 gtest 包）、
+    -- 高层在中、core 兜底（ld 依赖序）；静态库只拉被引用目标，多链无害。
+    add_links("libca_test", "libca_http", "libca_net", "libca_ui", "libca_log",
+              "libca_crypto", "libca_yaml", "libca_toml", "libca_xml", "libca_csv",
+              "libca_json", "libca_ini", "libca_env", "libca_zip", "libca_uuid",
+              "libca_random", "libca_process", "libca_thread", "libca_time",
+              "libca_fs", "libca_io", "libca_str", "libca_opt", "libca_core")
 
     -- libca 模块 target 的 add_syslinks 不随包安装传导，此处按平台补齐
     -- （macos 的 dl/pthread 在 libSystem 内，无需声明）。
