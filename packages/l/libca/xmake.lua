@@ -55,12 +55,17 @@ package("libca")
     on_install("windows", "linux", "macosx", function (package)
         local configs = {}
         -- 包安装只装库本体：em/demo/unittest 均为开发态目标，包构建一律关闭。
-        -- 早期快照版本尚无 zip/spdlog/openssl 开关，传入为惰性配置，无副作用。
         configs.with_em = false
         configs.with_demo = false
         configs.with_tests = false
-        configs.with_zip = package:config("zip")
-        configs.with_spdlog = package:config("spdlog")
+        -- 开关按版本门槛传递：xmake 对未定义 option 报 Invalid option 硬错。
+        -- with_spdlog 自 0.0.4（2026-08-23）引入；with_zip 自 0.0.6（2026-09-03）引入。
+        if package:version():ge("0.0.4") then
+            configs.with_spdlog = package:config("spdlog")
+        end
+        if package:version():ge("0.0.6") then
+            configs.with_zip = package:config("zip")
+        end
         configs.with_openssl = package:config("openssl")
         import("package.tools.xmake").install(package, configs)
     end)
