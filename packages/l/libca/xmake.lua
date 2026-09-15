@@ -8,10 +8,17 @@
 -- 发版/升级：在 libca 仓库定版后，于此文件 add_versions 追加新版本条目
 -- （既有条目只追加不修改，见 README 可复现纪律）；消费项目自行择机升级。
 --
--- 链接说明：add_links 覆盖全部模块库（含 libca_test——消费方须自行携带
--- gtest 包），libca resources/i18n 为 header-only 模块无库可链。
+-- 链接说明（按需子库）：不再整包 add_links。消费方通过 modules config 选择
+-- 需要的模块，on_load 按 MODULE_DEPS 闭包展开并按依赖序传导 links：
+--   add_requires("libca 0.0.7", {configs = {modules = "core,str,json"}})
+--   modules = "all"（默认）= 除 test 外全部模块。
+--   test 模块须显式点名（依赖 gtest，消费方须自带 gtest 包）。
+-- 未知名直接 raise，防止拼错静默丢链接。
+-- 模块间依赖以 libca/<module>/xmake.lua 的 target add_deps 为准，改 libca
+-- 模块依赖时须同步本表。
 -- libca 源内系统库依赖走各模块 target 的 add_syslinks（ws2_32/user32/
--- bcrypt/dbghelp/dl/pthread/rt），不随安装传导，故包定义按平台补齐。
+-- bcrypt/dbghelp/dl/pthread/rt），不随安装传导，故包定义按平台补齐
+-- （按平台全量声明，未用到的系统库由链接器自行裁剪，无副作用）。
 
 package("libca")
     set_homepage("https://github.com/luiox/libca")
@@ -43,14 +50,98 @@ package("libca")
     add_configs("zip", {description = "Enable libca.zip module (pulls zlib).", default = true, type = "boolean"})
     add_configs("spdlog", {description = "Enable spdlog backend for libca.log.", default = false, type = "boolean"})
     add_configs("openssl", {description = "Enable optional OpenSSL HTTPS client.", default = false, type = "boolean"})
+    add_configs("modules", {description = "Comma-separated modules to link, e.g. \"core,str,json\"; \"all\" (default) = everything except test.", default = "all", type = "string"})
 
-    -- 全模块链接：libca_test 在前（依赖 gtest+core，消费方须自带 gtest 包）、
-    -- 高层在中、core 兜底（ld 依赖序）；静态库只拉被引用目标，多链无害。
-    add_links("libca_test", "libca_http", "libca_net", "libca_ui", "libca_log",
-              "libca_crypto", "libca_yaml", "libca_toml", "libca_xml", "libca_csv",
-              "libca_json", "libca_ini", "libca_env", "libca_zip", "libca_uuid",
-              "libca_random", "libca_process", "libca_thread", "libca_time",
-              "libca_fs", "libca_io", "libca_str", "libca_opt", "libca_core")
+    -- 模块直接依赖表（源头：libca/<module>/xmake.lua target add_deps）。
+    -- 展开 modules config 为依赖序 links：闭包补全直接依赖，逆后序输出
+    -- （被依赖者在前，ld 依赖序）。未知名 raise，防拼错静默丢链接。
+    on_load(function (package)
+        local MODULE_DEPS =
+        {
+            core       = {},
+            collection = {"core"},
+            config     = {"core", "json", "fs"},
+            crypto     = {"core"},
+            csv        = {"core", "str"},
+            env        = {"core", "str"},
+            fs         = {"core", "str"},
+            http       = {"net", "thread", "str"},
+            i18n       = {"core", "str"},
+            ini        = {"core", "str"},
+            io         = {"core", "str"},
+            json       = {"core", "str", "fs"},
+            log        = {"core", "str"},
+            net        = {"io", "str"},
+            opt        = {"core", "str"},
+            process    = {"core", "str"},
+            random     = {"core", "crypto"},
+            resources  = {"core"},
+            str        = {"core"},
+            test       = {"core"},
+            thread     = {"core", "str"},
+            time       = {"core"},
+            toml       = {"core", "str"},
+            ui         = {"core", "str"},
+            uuid       = {"core", "crypto"},
+            xml        = {"core", "str"},
+            yaml       = {"core", "str"},
+            zip        = {"core"}
+        }
+        local requested = {}
+        local value = package:config("modules")
+        if value == nil or value == "" or value == "all" then
+            for name, _ in pairs(MODULE_DEPS) do
+                if name ~= "test" then
+                    requested[name] = true
+                end
+            end
+        else
+            for name in value:gmatch("[%w_]+") do
+                -- 沙盒边界上的字符串可能是包装对象，直接 [] 索引不命中，
+                -- 用 pairs 全等匹配解析模块名（27 项线性扫描，配置期一次性成本）。
+                local deps
+                for k, v in pairs(MODULE_DEPS) do
+                    if tostring(k) == tostring(name) then
+                        deps = v
+                        break
+                    end
+                end
+                if not deps then
+                    raise("libca package: unknown module \"%s\" in modules config (known: core, str, json, ...; \"all\" = everything except test)", tostring(name))
+                end
+                requested[tostring(name)] = deps
+            end
+        end
+        local ordered = {}
+        local marks = {}
+        local visit
+        visit = function (name)
+            if marks[name] == 2 then
+                return
+            end
+            assert(marks[name] ~= 1, "libca package: module dependency cycle at " .. name)
+            marks[name] = 1
+            for _, dep in ipairs(MODULE_DEPS[name]) do
+                visit(dep)
+            end
+            marks[name] = 2
+            table.insert(ordered, name)
+        end
+        for name, _ in pairs(requested) do
+            visit(name)
+        end
+        -- ordered 依赖在前，links 需要 ld 依赖序（依赖者在后），逆序输出。
+        for i = #ordered, 1, -1 do
+            package:add("links", "libca_" .. ordered[i])
+        end
+        -- 语言标准传导：libca 公开头部量使用 C++17（本 xmake 包解释器不支持
+        -- set_languages，用 on_load 注入编译标志传导给消费方 target）。
+        if package:is_plat("windows") then
+            package:add("cxxflags", "/std:c++17")
+        else
+            package:add("cxxflags", "-std=c++17")
+        end
+    end)
 
     -- libca 模块 target 的 add_syslinks 不随包安装传导，此处按平台补齐
     -- （macos 的 dl/pthread 在 libSystem 内，无需声明）。
@@ -84,11 +175,15 @@ package("libca")
     on_test(function (package)
         assert(package:has_cxxincludes("libca/core/result.hpp", {configs = {languages = "cxx17"}}))
         -- 链接级自检：取 str 模块非内联函数地址，强制符号解析走 libca_str+libca_core。
-        assert(package:check_cxxsnippets({test = [[
-            #include "libca/str/charset.hpp"
-            int main(int argc, char** argv) {
-                auto f = &ca::str::CharsetConverter::utf8_to_wide;
-                return f != nullptr && argc >= 0 ? 0 : 1;
-            }
-        ]]}, {configs = {languages = "cxx17"}}))
+        -- 仅当 str 在链接闭包内时执行（modules 可能只点名 core）。
+        local modules = package:config("modules")
+        if modules == nil or modules == "" or modules == "all" or modules:find("str", 1, true) then
+            assert(package:check_cxxsnippets({test = [[
+                #include "libca/str/charset.hpp"
+                int main(int argc, char** argv) {
+                    auto f = &ca::str::CharsetConverter::utf8_to_wide;
+                    return f != nullptr && argc >= 0 ? 0 : 1;
+                }
+            ]]}, {configs = {languages = "cxx17"}}))
+        end
     end)
