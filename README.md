@@ -1,6 +1,6 @@
 # luiox-repo
 
-luiox 自研私有库的 xmake **包定义仓**（package definitions only）。库源码不在本仓——
+luiox 自研库的 xmake **包定义仓**（package definitions only）。库源码不在本仓——
 各库来自它自己的 git 仓库；本仓只回答「有哪些版本、怎么构建安装」。
 
 ## 消费方接线
@@ -9,7 +9,7 @@ luiox 自研私有库的 xmake **包定义仓**（package definitions only）。
 
 ```lua
 add_repositories("luiox-repo https://github.com/luiox/luiox-repo.git")
-add_requires("libca 0.0.1")
+add_requires("libca 0.0.7")
 ```
 
 开发机全局（对本机所有项目生效，`xrepo` 命令行场景适用）：
@@ -18,10 +18,10 @@ add_requires("libca 0.0.1")
 xrepo add-repo luiox-repo https://github.com/luiox/luiox-repo.git
 ```
 
-私有仓认证：xmake 对 git URL 直接调用系统 git，SSH key / Windows 凭据管理器 /
-credential helper 自动生效，CI 用 deploy key，与 submodule 时代同源，无额外配置。
+非公开源码仓认证：xmake 对 git URL 直接调用系统 git，SSH key / Windows 凭据管理
+器 / credential helper 自动生效，CI 用 deploy key，与 submodule 时代同源，无额外配置。
 若全局 `.gitconfig` 配置了失效代理：公共库可 `GIT_CONFIG_GLOBAL=/dev/null xmake ...`
-绕过；**私有库会连凭据一起丢**，改用注入方式只覆盖代理、保留凭据 helper：
+绕过；**非公开库会连凭据一起丢**，改用注入方式只覆盖代理、保留凭据 helper：
 
 ```sh
 GIT_CONFIG_COUNT=2 GIT_CONFIG_KEY_0=http.proxy GIT_CONFIG_VALUE_0= \
@@ -41,6 +41,8 @@ GIT_CONFIG_KEY_1=https.proxy GIT_CONFIG_VALUE_1= xmake ...
 
 | 包 | 版本 | 源码 |
 |---|---|---|
-| libca | 0.0.1 | [luiox/libca](https://github.com/luiox/libca) @ `1ab29dea` |
+| [libca](packages/l/libca/xmake.lua) | 0.0.1 – 0.0.7 | [luiox/libca](https://github.com/luiox/libca) |
+
+> 0.0.7 起包内不再含 em（已拆分至独立仓库）。0.0.2 为嵌入式代快照，勿在桌面消费。
 
 新增包：`packages/<包名首字母>/<包名>/xmake.lua`，参考 libca 现有定义。

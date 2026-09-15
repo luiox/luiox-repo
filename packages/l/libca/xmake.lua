@@ -3,7 +3,7 @@
 -- 机制：add_urls 指向 git 仓库 + add_versions 第二参数锁 commit。
 -- xmake 用系统 git 克隆并 checkout 到锁定 commit，随后在本包沙箱内
 -- 独立构建安装（不进消费工程的 target 图）。
--- 私有仓认证走系统 git 凭据（SSH agent / Windows 凭据管理器），无额外配置。
+-- git 认证走系统凭据（SSH agent / Windows 凭据管理器），无额外配置。
 --
 -- 发版/升级：在 libca 仓库定版后，于此文件 add_versions 追加新版本条目
 -- （既有条目只追加不修改，见 README 可复现纪律）；消费项目自行择机升级。
@@ -21,17 +21,17 @@ package("libca")
     add_urls("https://github.com/luiox/libca.git")
 
     -- 语义版本名 + 锁定 commit。版本条目只追加、不修改。
-    -- 0.0.1 = morpher 原 submodule 指针（2026-08-27）。
+    -- 0.0.1 = 首个迁移基线（原 submodule 指针，2026-08-27）。
     add_versions("0.0.1", "1ab29dea31c6649fccc8d83ae3312264a88b5f1f")
-    -- 0.0.2~0.0.5 = 其余消费项目原 submodule 指针快照（迁移期零 API 变化对齐用，
-    -- 全部项目对齐同一版本后可废弃）。
-    -- 注意 0.0.2（ota_demo 原 pin）是嵌入式代 libca（libca.em 形态、交叉编译
-    -- 消费），不适用本包的桌面构建路径，仅为版本编号连续性保留，勿消费。
-    add_versions("0.0.2", "0c901e411fbcd6acb28bee2aee3634fcb524332c") -- ota_demo            2026-04-02
-    add_versions("0.0.3", "e7d25ac654ad7b7c5b7305388483cde7db94a2ba") -- uikit-repo          2026-07-26
-    add_versions("0.0.4", "d6676b8da6b7ae723207e9fe2b34837073b0c2f8") -- lab-duilib/mlaunch  2026-08-23
-    add_versions("0.0.5", "0a5f1a21d5772614e3cb30c5be3b7c19aa871008") -- sepacker            2026-08-24
-    add_versions("0.0.6", "2d005cbbfe2433864177ce29a5e6d5c94b9f61c0") -- can-dbc/can-toolkit 2026-09-03
+    -- 0.0.2~0.0.6 = 存量消费方 submodule 指针快照（迁移期零 API 变化对齐用，
+    -- 全部消费方对齐同一版本后可废弃）。
+    -- 注意 0.0.2 是嵌入式代 libca（libca.em 形态、交叉编译消费），不适用本包
+    -- 的桌面构建路径，仅为版本编号连续性保留，勿消费。
+    add_versions("0.0.2", "0c901e411fbcd6acb28bee2aee3634fcb524332c") -- 2026-04-02
+    add_versions("0.0.3", "e7d25ac654ad7b7c5b7305388483cde7db94a2ba") -- 2026-07-26
+    add_versions("0.0.4", "d6676b8da6b7ae723207e9fe2b34837073b0c2f8") -- 2026-08-23
+    add_versions("0.0.5", "0a5f1a21d5772614e3cb30c5be3b7c19aa871008") -- 2026-08-24
+    add_versions("0.0.6", "2d005cbbfe2433864177ce29a5e6d5c94b9f61c0") -- 2026-09-03
     -- 0.0.7 = em 拆分发版：libca.em 整体迁出至 luiox/libca-em（PR libca#217 squash），
     -- 本包自此不再含 em；with_em 选项已从 libca 删除（on_install 按版本门控）。
     add_versions("0.0.7", "5d7d0b21dbd6c660be0fc798870cb07df86d706d") -- em 拆分           2026-09-15
