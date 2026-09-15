@@ -32,6 +32,9 @@ package("libca")
     add_versions("0.0.4", "d6676b8da6b7ae723207e9fe2b34837073b0c2f8") -- lab-duilib/mlaunch  2026-08-23
     add_versions("0.0.5", "0a5f1a21d5772614e3cb30c5be3b7c19aa871008") -- sepacker            2026-08-24
     add_versions("0.0.6", "2d005cbbfe2433864177ce29a5e6d5c94b9f61c0") -- can-dbc/can-toolkit 2026-09-03
+    -- 0.0.7 = em 拆分发版：libca.em 整体迁出至 luiox/libca-em（PR libca#217 squash），
+    -- 本包自此不再含 em；with_em 选项已从 libca 删除（on_install 按版本门控）。
+    add_versions("0.0.7", "5d7d0b21dbd6c660be0fc798870cb07df86d706d") -- em 拆分           2026-09-15
 
     -- libca_str 的 format.hpp 在公开头里包含 fmt/core.h，str 以 fmt(header-only)
     -- 为公开接口依赖——包必须传递声明，消费方才能拿到 fmt 的包含路径。
@@ -60,7 +63,10 @@ package("libca")
     on_install("windows", "linux", "macosx", function (package)
         local configs = {}
         -- 包安装只装库本体：em/demo/unittest 均为开发态目标，包构建一律关闭。
-        configs.with_em = false
+        -- with_em 自 0.0.7 起已随 em 拆分从 libca 删除，仅对旧版本传递。
+        if package:version():lt("0.0.7") then
+            configs.with_em = false
+        end
         configs.with_demo = false
         configs.with_tests = false
         -- 开关按版本门槛传递：xmake 对未定义 option 报 Invalid option 硬错。
