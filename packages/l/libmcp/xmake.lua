@@ -14,7 +14,11 @@ package("libmcp")
 
     -- 语义版本名 + 锁定 commit。版本条目只追加、不修改。
     -- 0.0.1 = 拆分基线（subtree split 保留 morpher 全部历史 + 独立仓库化适配）。
+    -- 0.0.1 头文件安装布局有缺陷（include 拍平，缺 mcp/ 层级），勿消费；仅作历史快照保留。
     add_versions("0.0.1", "b6274c719516dd905d86ae2415a163ef97e6b08d")
+    -- 0.0.2 = 头文件安装根修复：add_headerfiles 以 (mcp/...) 为安装根，
+    -- 包消费方可 #include <mcp/mcp.hpp>；另含 README 免责声明与 CI。
+    add_versions("0.0.2", "1fb871e8e9bd8cfd345b4f8482bf04b78b733a44")
 
     -- libmcp 公开暴露 libca 类型（mcp.hpp 等），public 传导。
     add_deps("libca 0.0.7", {public = true})
