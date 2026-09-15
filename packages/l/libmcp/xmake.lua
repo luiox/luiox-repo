@@ -30,6 +30,16 @@ package("libmcp")
         import("package.tools.xmake").install(package, configs)
     end)
 
+    -- 消费方语言标准传导：本包及 libca 依赖均为 C++17（本 xmake 包解释器
+    -- 不支持 set_languages，用 on_load 注入编译标志，向下游 target 传导）。
+    on_load(function (package)
+        if package:is_plat("windows") then
+            package:add("cxxflags", "/std:c++17")
+        else
+            package:add("cxxflags", "-std=c++17")
+        end
+    end)
+
     on_test(function (package)
         assert(package:has_cxxincludes("mcp/mcp.hpp", {configs = {languages = "cxx17"}}))
     end)
