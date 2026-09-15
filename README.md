@@ -42,9 +42,12 @@ GIT_CONFIG_KEY_1=https.proxy GIT_CONFIG_VALUE_1= xmake ...
 | 包 | 版本 | 源码 |
 |---|---|---|
 | [libca](packages/l/libca/xmake.lua) | 0.0.1 – 0.0.7 | [luiox/libca](https://github.com/luiox/libca) |
-| [libmcp](packages/m/libmcp/xmake.lua) | 0.0.1 | [luiox/libmcp](https://github.com/luiox/libmcp) |
+| [libmcp](packages/l/libmcp/xmake.lua) | 0.0.1 – 0.0.2 | [luiox/libmcp](https://github.com/luiox/libmcp) |
 
 > libca 0.0.7 起包内不再含 em（已拆分至独立仓库）。0.0.2 为嵌入式代快照，勿在桌面消费。
-> libmcp 依赖 libca 0.0.7（public 传导）。
+> libmcp 依赖 libca 0.0.7（public 传导）；libmcp 0.0.1 头文件安装布局有缺陷，勿消费。
+> libca 按需子库：`add_requires("libca 0.0.7", {configs = {modules = "core,str,json"}})`，
+> links 按 MODULE_DEPS 依赖闭包裁剪；`all`（默认）= 除 test 外全部模块；
+> test 须显式点名（消费方自带 gtest）；未知名直接报错。
 
 新增包：`packages/<包名首字母>/<包名>/xmake.lua`，参考 libca 现有定义。
