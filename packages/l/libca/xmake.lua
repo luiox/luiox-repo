@@ -42,6 +42,9 @@ package("libca")
     -- 0.0.7 = em 拆分发版：libca.em 整体迁出至 luiox/libca-em（PR libca#217 squash），
     -- 本包自此不再含 em；with_em 选项已从 libca 删除（on_install 按版本门控）。
     add_versions("0.0.7", "5d7d0b21dbd6c660be0fc798870cb07df86d706d") -- em 拆分           2026-09-15
+    -- 0.0.8 = opt 新增 HelpTable 两列 help 行表（morpher#890）：渲染期 UTF-8 码点计宽补齐，
+    -- 替代手工空格对齐；纯新增 API，无不兼容变更。
+    add_versions("0.0.8", "560d263f36b257699681371a8d6192079d16ff02") -- opt HelpTable     2026-09-17
 
     -- libca_str 的 format.hpp 在公开头里包含 fmt/core.h，str 以 fmt(header-only)
     -- 为公开接口依赖——包必须传递声明，消费方才能拿到 fmt 的包含路径。
