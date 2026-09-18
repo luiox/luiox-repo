@@ -46,7 +46,9 @@ package("duilib")
             no_activex = package:config("no_activex"),
             no_imageboxex = package:config("no_imageboxex"),
         }
-        import("package.tools.xmake").install(package, configs, {targets = "DuiLib"})
+        -- pugixml 是 DuiLib 的内部依赖 target（独立 TU），链接闭包必须一起装，
+        -- 否则消费方/自检链接时 ui_pugi::* 全部未解析（fork 排除清单外的既有形态）。
+        import("package.tools.xmake").install(package, configs, { targets = { "DuiLib", "pugixml" } })
         -- fork 的 DuiLib target 未声明 add_headerfiles，公开头手动随包装。
         -- 必须保持子目录结构：UIlib.h 以相对路径拉起 Utils/Core/Control 等子目录头。
         local includedir = package:installdir("include")
@@ -60,6 +62,11 @@ package("duilib")
                 os.cp(path.join("DuiLib", sub, pat), d)
             end
         end
+    end)
+
+    on_load(function (package)
+        -- 链接顺序：DuiLib 依赖 pugixml（消费方/自检都从这里取）
+        package:add("links", "DuiLib", "pugixml")
     end)
 
     on_test(function (package)
