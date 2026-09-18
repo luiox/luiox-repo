@@ -21,10 +21,13 @@ package("micon")
     -- 0.2.0 = 首个入包基线（set_version 与仓库 xmake.lua 对齐，2026-08-30 定版）。
     add_versions("0.2.0", "f1a5a9dac8f87555df5e1b125cf3da52de220354")
 
-    add_configs("embed", {description = "Embed SVG assets into the binary (micon_embed); false = load from disk at runtime (micon_dynamic).", default = true, type = "boolean"})
+    -- 注意极性：config 叫 dynamic(默认 false=内嵌)而不是 embed(默认 true)。
+    -- xmake configs 显式传 false 不传导(等价未设置→取默认)，传 true 无此问题；
+    -- 默认变体是内嵌，故把"需要显式选择"的一侧做成 true 才可靠。
+    add_configs("dynamic", {description = "Load SVG assets from disk at runtime (micon_dynamic); default false = embed assets into the binary (micon_embed).", default = false, type = "boolean"})
 
     on_install("windows", "linux", "macosx", function (package)
-        local target = package:config("embed") and "micon_embed" or "micon_dynamic"
+        local target = package:config("dynamic") and "micon_dynamic" or "micon_embed"
         import("package.tools.xmake").install(package, {}, {targets = target})
         -- dynamic 变体运行期要从磁盘读 icons/*.svg，资源目录随包安装
         -- （embed 变体用不到，但体积小，统一安装省一个分支）。
