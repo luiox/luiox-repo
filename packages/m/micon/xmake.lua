@@ -26,6 +26,9 @@ package("micon")
     on_install("windows", "linux", "macosx", function (package)
         local target = package:config("embed") and "micon_embed" or "micon_dynamic"
         import("package.tools.xmake").install(package, {}, {targets = target})
+        -- dynamic 变体运行期要从磁盘读 icons/*.svg，资源目录随包安装
+        -- （embed 变体用不到，但体积小，统一安装省一个分支）。
+        os.cp("icons", package:installdir())
     end)
 
     on_test(function (package)
