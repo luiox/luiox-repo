@@ -22,9 +22,10 @@ package("uikit")
 
     -- 语义版本名 + 锁定 commit。版本条目只追加、不修改。
     -- 0.1.0 = 首版：清壳 + design 深浅令牌 + core 引擎（19 单测）+ duilib
-    -- 控件/应用器/无边框窗口 + CI（cf9b34c 为 PR uikit#2 分支头，合并后仍按
-    -- commit 可达；后续版本自 main 定版）。
-    add_versions("0.1.0", "cf9b34cc876b965a1ec39b4f38752b81d1cf6d44")
+    -- 控件/应用器/无边框窗口 + CI。b43357c 移除了残留 DuiLib_DuiEditor
+    -- submodule（duilib 自本仓包供给，submodule 残留会炸 xmake 克隆递归）；
+    -- 该条目发布前原地修正，尚无消费方。后续版本自 main 定版。
+    add_versions("0.1.0", "b43357c854903748b84e51082915f65f76bbca34")
 
     add_configs("core_only", {description = "Install core theme engine only (no duilib layer/dependency; usable on linux/macos).", default = false, type = "boolean"})
 
