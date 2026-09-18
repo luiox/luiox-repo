@@ -57,7 +57,7 @@ package("duilib")
     end)
 
     on_test(function (package)
-        assert(package:has_cxxincludes("UIlib.h", {configs = {defines = "WIN32,WINDOWS,UNICODE,_UNICODE,UILIB_STATIC", languages = "cxx17"}}))
+        assert(package:has_cxxincludes("UIlib.h", {configs = {defines = { "WIN32", "WINDOWS", "UNICODE", "_UNICODE", "UILIB_STATIC" }, languages = "cxx17"}}))
         -- 链接级自检：取 CPaintManagerUI 静态成员函数地址，强制符号解析走静态库。
         assert(package:check_cxxsnippets({test = [[
             #include "UIlib.h"
@@ -65,5 +65,5 @@ package("duilib")
                 auto f = &DuiLib::CPaintManagerUI::SetResourcePath;
                 return f != nullptr && argc >= 0 ? 0 : 1;
             }
-        ]]}, {configs = {defines = "WIN32,WINDOWS,UNICODE,_UNICODE,UILIB_STATIC", languages = "cxx17"}}))
+        ]]}, {configs = {defines = { "WIN32", "WINDOWS", "UNICODE", "_UNICODE", "UILIB_STATIC" }, languages = "cxx17"}}))
     end)
