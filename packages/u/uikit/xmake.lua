@@ -25,7 +25,7 @@ package("uikit")
     -- 控件/应用器/无边框窗口 + CI。b43357c 移除了残留 DuiLib_DuiEditor
     -- submodule（duilib 自本仓包供给，submodule 残留会炸 xmake 克隆递归）；
     -- 该条目发布前原地修正，尚无消费方。后续版本自 main 定版。
-    add_versions("0.1.0", "b43357c854903748b84e51082915f65f76bbca34")
+    add_versions("0.1.0", "1e9cb2c894f6267341d33218325fd1671def738e")
 
     add_configs("core_only", {description = "Install core theme engine only (no duilib layer/dependency; usable on linux/macos).", default = false, type = "boolean"})
 
@@ -55,27 +55,14 @@ package("uikit")
             raise("uikit: duilib layer is windows-only; on %s use core_only=true", package:plat())
         end
         -- 包安装只装库本体：demo/unittest 均为开发态目标，包构建一律关闭。
+        -- 头与库的安装完全走 target 口径（add_headerfiles("include/(uikit/**)")
+        -- + 静态库默认安装规则），与 libca 同款，本文件零手动拷贝。
         local configs = {
             core_only = core_only,
             tests = false,
             demo = false,
         }
         import("package.tools.xmake").install(package, configs)
-        -- 公开头随包装，保持 include 根结构：core 以 "uikit/theme/..."、
-        -- duilib 层以 "uikit/duilib/..." 引用，compat.h 又相对拉起 theme 头。
-        local includedir = package:installdir("include")
-        os.cp("core/include/uikit", includedir)
-        if not core_only then
-            os.cp("duilib/include/uikit/duilib", path.join(includedir, "uikit"))
-        end
-        -- 静态库随包装（xmake 默认 builddir 结构 build/<plat>/<arch>/release）。
-        local libdir = package:installdir("lib")
-        local ext = package:is_plat("windows") and ".lib" or ".a"
-        local prefix = package:is_plat("windows") and "" or "lib"
-        os.cp(path.join("build", package:plat(), package:arch(), "release", prefix .. "uikit_core" .. ext), libdir)
-        if not core_only then
-            os.cp(path.join("build", package:plat(), package:arch(), "release", prefix .. "uikit_duilib" .. ext), libdir)
-        end
     end)
 
     on_test(function (package)
