@@ -26,7 +26,10 @@ package("libmcp")
     -- 逐字节一致，经 diff 核对）。独立仓 unittest 54/54。
     add_versions("0.1.0", "dcc72bdc014536cbc46c5977bdcb15b33eb26929")
     -- libmcp 公开暴露 libca 类型（mcp.hpp 等），public 传导。
-    add_deps("libca 0.0.7", {public = true})
+    -- 范围约束（>=0.0.7）：libca 0.0.8 为纯新增 API（opt HelpTable，
+    -- morpher#890），向后兼容；消费方项目级精确 pin（如 libca 0.0.8）与
+    -- 本传导约束按 xmake 规则统一到消费方版本。
+    add_deps("libca >=0.0.7", {public = true})
 
     on_install("windows", "linux", "macosx", function (package)
         local configs = {}
