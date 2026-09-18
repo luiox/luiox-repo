@@ -43,6 +43,13 @@ package("duilib")
             no_imageboxex = package:config("no_imageboxex"),
         }
         import("package.tools.xmake").install(package, configs, {targets = "DuiLib"})
+        -- fork 的 DuiLib target 未声明 add_headerfiles，公开头手动随包装。
+        -- 必须保持子目录结构：UIlib.h 以相对路径拉起 Utils/Core/Control 等子目录头。
+        local includedir = package:installdir("include")
+        os.cp("DuiLib/*.h", includedir)
+        for _, sub in ipairs({ "Core", "Control", "Layout", "Render", "Utils" }) do
+            os.cp(path.join("DuiLib", sub, "*.h"), path.join(includedir, sub))
+        end
     end)
 
     on_test(function (package)
