@@ -52,7 +52,10 @@ package("duilib")
         local includedir = package:installdir("include")
         os.cp("DuiLib/*.h", includedir)
         for _, sub in ipairs({ "Core", "Control", "Layout", "Render", "Utils" }) do
-            os.cp(path.join("DuiLib", sub, "*.h"), path.join(includedir, sub))
+            -- os.cp 不会自建目标目录，子目录须先 mkdir
+            local d = path.join(includedir, sub)
+            os.mkdir(d)
+            os.cp(path.join("DuiLib", sub, "*.h"), d)
         end
     end)
 
