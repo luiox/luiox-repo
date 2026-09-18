@@ -25,7 +25,7 @@ package("uikit")
     -- 控件/应用器/无边框窗口 + CI。b43357c 移除了残留 DuiLib_DuiEditor
     -- submodule（duilib 自本仓包供给，submodule 残留会炸 xmake 克隆递归）；
     -- 该条目发布前原地修正，尚无消费方。后续版本自 main 定版。
-    add_versions("0.1.0", "1e9cb2c894f6267341d33218325fd1671def738e")
+    add_versions("0.1.0", "800249eb18484a56cc0bcd46f00224a4552af1a1")
 
     add_configs("core_only", {description = "Install core theme engine only (no duilib layer/dependency; usable on linux/macos).", default = false, type = "boolean"})
 
