@@ -52,10 +52,13 @@ package("duilib")
         local includedir = package:installdir("include")
         os.cp("DuiLib/*.h", includedir)
         for _, sub in ipairs({ "Core", "Control", "Layout", "Render", "Utils" }) do
-            -- os.cp 不会自建目标目录，子目录须先 mkdir
+            -- os.cp 不会自建目标目录，子目录须先 mkdir；
+            -- *.tlh（flash11 类型库头）/*.hpp（UIDataExchange）是 UIFlash.h 等公开头的依赖
             local d = path.join(includedir, sub)
             os.mkdir(d)
-            os.cp(path.join("DuiLib", sub, "*.h"), d)
+            for _, pat in ipairs({ "*.h", "*.tlh", "*.hpp" }) do
+                os.cp(path.join("DuiLib", sub, pat), d)
+            end
         end
     end)
 
