@@ -20,6 +20,11 @@ package("libmcp")
     -- 包消费方可 #include <mcp/mcp.hpp>；另含 README 免责声明与 CI。
     add_versions("0.0.2", "1fb871e8e9bd8cfd345b4f8482bf04b78b733a44")
 
+    -- 0.1.0 = dual-era 双协议核心（modern 无状态分派 + server/discover +
+    -- resultType 信封）+ Streamable HTTP 双模路由；morpher #947 的
+    -- "libmcp vendored 同步 v2" 改道独立仓发版（9 文件与 vendored 内容
+    -- 逐字节一致，经 diff 核对）。独立仓 unittest 54/54。
+    add_versions("0.1.0", "dcc72bdc014536cbc46c5977bdcb15b33eb26929")
     -- libmcp 公开暴露 libca 类型（mcp.hpp 等），public 传导。
     add_deps("libca 0.0.7", {public = true})
 
