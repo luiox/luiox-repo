@@ -50,6 +50,9 @@ package("libca")
     -- 守卫 Err(UNSUPPORTED) 化）、udp set_ttl；ui 模块已移除，MODULE_DEPS 同步删除
     -- ui 条目（上游 CHANGELOG [0.0.9] 全局节有消费方迁移说明）。
     add_versions("0.0.9", "f3bae80b5b97a4e545d55c2dcea3c42ab2ee6871") -- 九支批+ui 移除   2026-10-01
+    -- random/crypto 原语（SplitMix64/Xorshift32 header-only、DES FIPS 46-3 全套）、
+    -- 包定义 Windows syslinks 补 Iphlpapi（on_test net 自检按 >=0.0.8 版本门控）。
+    add_versions("0.0.10", "bcbfebb4491238dd163f2a0fe5157b2085416457") -- PRNG+DES+Iphlpapi 2026-10-02
 
     -- libca_str 的 format.hpp 在公开头里包含 fmt/core.h，str 以 fmt(header-only)
     -- 为公开接口依赖——包必须传递声明，消费方才能拿到 fmt 的包含路径。
