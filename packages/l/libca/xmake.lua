@@ -16,8 +16,8 @@
 -- 未知名直接 raise，防止拼错静默丢链接。
 -- 模块间依赖以 libca/<module>/xmake.lua 的 target add_deps 为准，改 libca
 -- 模块依赖时须同步本表。
--- libca 源内系统库依赖走各模块 target 的 add_syslinks（ws2_32/user32/
--- bcrypt/dbghelp/dl/pthread/rt），不随安装传导，故包定义按平台补齐
+-- libca 源内系统库依赖走各模块 target 的 add_syslinks（ws2_32/iphlpapi/
+-- user32/bcrypt/dbghelp/dl/pthread/rt），不随安装传导，故包定义按平台补齐
 -- （按平台全量声明，未用到的系统库由链接器自行裁剪，无副作用）。
 
 package("libca")
@@ -152,8 +152,11 @@ package("libca")
 
     -- libca 模块 target 的 add_syslinks 不随包安装传导，此处按平台补齐
     -- （macos 的 dl/pthread 在 libSystem 内，无需声明）。
+    -- Iphlpapi：net 模块 sock_util.cpp 的 interface_list 调 GetAdaptersAddresses
+    -- （libca 50bb642 引入），缺失时包消费方链接报 LNK2019 __imp_GetAdaptersAddresses
+    -- （morpher#952，mjt-mcp 实证）。
     if is_plat("windows", "mingw") then
-        add_syslinks("User32", "Gdi32", "Bcrypt", "DbgHelp", "Ws2_32")
+        add_syslinks("User32", "Gdi32", "Bcrypt", "DbgHelp", "Ws2_32", "Iphlpapi")
     elseif is_plat("linux") then
         add_syslinks("dl", "pthread", "rt")
     end
@@ -189,6 +192,18 @@ package("libca")
                 #include "libca/str/charset.hpp"
                 int main(int argc, char** argv) {
                     auto f = &ca::str::CharsetConverter::utf8_to_wide;
+                    return f != nullptr && argc >= 0 ? 0 : 1;
+                }
+            ]]}, {configs = {languages = "cxx17"}}))
+        end
+        -- 链接级自检（net）：取 interface_list 地址，强制解析 libca_net 的
+        -- sock_util.obj 符号（引用 Ws2_32/Iphlpapi）。包 syslinks 补齐清单缺失时
+        -- 安装期即失败，防再发 morpher#952 类「库装上了、消费方链接炸」回归。
+        if modules == nil or modules == "" or modules == "all" or modules:find("net", 1, true) then
+            assert(package:check_cxxsnippets({test = [[
+                #include "libca/net/sock_util.hpp"
+                int main(int argc, char** argv) {
+                    auto f = &ca::net::interface_list;
                     return f != nullptr && argc >= 0 ? 0 : 1;
                 }
             ]]}, {configs = {languages = "cxx17"}}))
