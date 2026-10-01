@@ -45,6 +45,11 @@ package("libca")
     -- 0.0.8 = opt 新增 HelpTable 两列 help 行表（morpher#890）：渲染期 UTF-8 码点计宽补齐，
     -- 替代手工空格对齐；纯新增 API，无不兼容变更。
     add_versions("0.0.8", "560d263f36b257699681371a8d6192079d16ff02") -- opt HelpTable     2026-09-17
+    -- 0.0.9 = 九支批合并发版：str UTF-8 严格校验/时间严格解析、fs *_ex 与原子创建、
+    -- http 流式收发与协议健壮性、config 持久化出口、zip 异常→Result 全迁移（含溢出
+    -- 守卫 Err(UNSUPPORTED) 化）、udp set_ttl；ui 模块已移除，MODULE_DEPS 同步删除
+    -- ui 条目（上游 CHANGELOG [0.0.9] 全局节有消费方迁移说明）。
+    add_versions("0.0.9", "f3bae80b5b97a4e545d55c2dcea3c42ab2ee6871") -- 九支批+ui 移除   2026-10-01
 
     -- libca_str 的 format.hpp 在公开头里包含 fmt/core.h，str 以 fmt(header-only)
     -- 为公开接口依赖——包必须传递声明，消费方才能拿到 fmt 的包含路径。
@@ -84,7 +89,6 @@ package("libca")
             thread     = {"core", "str"},
             time       = {"core"},
             toml       = {"core", "str"},
-            ui         = {"core", "str"},
             uuid       = {"core", "crypto"},
             xml        = {"core", "str"},
             yaml       = {"core", "str"},
