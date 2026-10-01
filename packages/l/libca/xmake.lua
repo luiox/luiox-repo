@@ -199,13 +199,17 @@ package("libca")
         -- 链接级自检（net）：取 interface_list 地址，强制解析 libca_net 的
         -- sock_util.obj 符号（引用 Ws2_32/Iphlpapi）。包 syslinks 补齐清单缺失时
         -- 安装期即失败，防再发 morpher#952 类「库装上了、消费方链接炸」回归。
-        if modules == nil or modules == "" or modules == "all" or modules:find("net", 1, true) then
-            assert(package:check_cxxsnippets({test = [[
-                #include "libca/net/sock_util.hpp"
-                int main(int argc, char** argv) {
-                    auto f = &ca::net::interface_list;
-                    return f != nullptr && argc >= 0 ? 0 : 1;
-                }
-            ]]}, {configs = {languages = "cxx17"}}))
+        -- net 模块头 sock_util.hpp 自 0.0.8（libca 560d263）才存在，对更早的
+        -- 锁定版本此自检会在 on_test 编译期直接打死，按版本门控（评审 R7）。
+        if package:version():ge("0.0.8") then
+            if modules == nil or modules == "" or modules == "all" or modules:find("net", 1, true) then
+                assert(package:check_cxxsnippets({test = [[
+                    #include "libca/net/sock_util.hpp"
+                    int main(int argc, char** argv) {
+                        auto f = &ca::net::interface_list;
+                        return f != nullptr && argc >= 0 ? 0 : 1;
+                    }
+                ]]}, {configs = {languages = "cxx17"}}))
+            end
         end
     end)
