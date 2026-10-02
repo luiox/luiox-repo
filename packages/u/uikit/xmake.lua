@@ -26,6 +26,15 @@ package("uikit")
     -- submodule（duilib 自本仓包供给，submodule 残留会炸 xmake 克隆递归）；
     -- 该条目发布前原地修正，尚无消费方。后续版本自 main 定版。
     add_versions("0.1.0", "800249eb18484a56cc0bcd46f00224a4552af1a1")
+    -- 0.2.0 = 控件三批定版（main 0141126）：
+    -- 一批 452e549：状态语义色令牌（success/warning/danger）+ MessageBox/
+    --   Edit/ProgressBar 三件套；
+    -- 二批 8839565：uikit 顶层命名空间（无 UI 后缀）+ 默认直角令牌
+    --   （radius_* 归零）+ Switch/Slider/ComboBox/SpinBox/Toast；
+    -- 三批 86c1546+7bfb8e5+5cb3134：TabControl/Menu/Tooltip/DatePicker；
+    -- 0141126（PR#5）：FrameWindow——标题栏 + 最小化/最大化/关闭自绘钮的
+    --   完整无边框窗预制件，最大化 NC 框厚修正。
+    add_versions("0.2.0", "0141126727c49df4547273d32cf529f801b9d2d1")
 
     add_configs("core_only", {description = "Install core theme engine only (no duilib layer/dependency; usable on linux/macos).", default = false, type = "boolean"})
 
