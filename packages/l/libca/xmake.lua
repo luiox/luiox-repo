@@ -58,6 +58,10 @@ package("libca")
     -- 公开签名不动；上游 CHANGELOG [0.0.11] 节无 [不兼容] 条目。
     add_versions("0.0.11", "6bcaed70daf58ef68b39ed43e1e57a7c81a5d970") -- clone 单分配     2026-10-03
     add_versions("0.0.12", "647bbc91f03380042c9c426a886deb94a7812df2") -- #228 测试覆盖+iphlpapi 文档 2026-10-03
+    -- opt HelpTable 排版能力扩展（morpher#890：多列布局/原样行块/折行/CJK 显示宽，
+    -- 纯加法）+ fs 纯测试覆盖 + FileMetadata 注释口径卡；上游 CHANGELOG [0.0.13]
+    -- 节无 [不兼容] 条目。
+    add_versions("0.0.13", "b1d51dd3e6d1b8e9186e560290fc4a2dbe5be4f9") -- opt HelpTable+fs 测试 2026-10-03
 
     -- libca_str 的 format.hpp 在公开头里包含 fmt/core.h，str 以 fmt(header-only)
     -- 为公开接口依赖——包必须传递声明，消费方才能拿到 fmt 的包含路径。
