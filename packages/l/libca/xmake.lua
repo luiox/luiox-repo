@@ -57,6 +57,7 @@ package("libca")
     -- 2→1 alloc）：仅新增私有标记构造，不引入数据成员/虚函数，API/ABI 兼容，
     -- 公开签名不动；上游 CHANGELOG [0.0.11] 节无 [不兼容] 条目。
     add_versions("0.0.11", "6bcaed70daf58ef68b39ed43e1e57a7c81a5d970") -- clone 单分配     2026-10-03
+    add_versions("0.0.12", "647bbc91f03380042c9c426a886deb94a7812df2") -- #228 测试覆盖+iphlpapi 文档 2026-10-03
 
     -- libca_str 的 format.hpp 在公开头里包含 fmt/core.h，str 以 fmt(header-only)
     -- 为公开接口依赖——包必须传递声明，消费方才能拿到 fmt 的包含路径。
