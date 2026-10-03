@@ -53,6 +53,10 @@ package("libca")
     -- random/crypto 原语（SplitMix64/Xorshift32 header-only、DES FIPS 46-3 全套）、
     -- 包定义 Windows syslinks 补 Iphlpapi（on_test net 自检按 >=0.0.8 版本门控）。
     add_versions("0.0.10", "bcbfebb4491238dd163f2a0fe5157b2085416457") -- PRNG+DES+Iphlpapi 2026-10-02
+    -- Utf8String::clone 单分配化（私有 uninitialized_t 标记构造，非空 clone
+    -- 2→1 alloc）：仅新增私有标记构造，不引入数据成员/虚函数，API/ABI 兼容，
+    -- 公开签名不动；上游 CHANGELOG [0.0.11] 节无 [不兼容] 条目。
+    add_versions("0.0.11", "6bcaed70daf58ef68b39ed43e1e57a7c81a5d970") -- clone 单分配     2026-10-03
 
     -- libca_str 的 format.hpp 在公开头里包含 fmt/core.h，str 以 fmt(header-only)
     -- 为公开接口依赖——包必须传递声明，消费方才能拿到 fmt 的包含路径。
