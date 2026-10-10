@@ -62,6 +62,7 @@ package("libca")
     -- 纯加法）+ fs 纯测试覆盖 + FileMetadata 注释口径卡；上游 CHANGELOG [0.0.13]
     -- 节无 [不兼容] 条目。
     add_versions("0.0.13", "b1d51dd3e6d1b8e9186e560290fc4a2dbe5be4f9") -- opt HelpTable+fs 测试 2026-10-03
+    add_versions("0.0.14", "42412def256acc5476fc446c7a9df84c4671a254") -- fs::Path + 解析器 Path 化（闭包补 fs）；组名/文档纠偏 2026-10-10
 
     -- libca_str 的 format.hpp 在公开头里包含 fmt/core.h，str 以 fmt(header-only)
     -- 为公开接口依赖——包必须传递声明，消费方才能拿到 fmt 的包含路径。
@@ -82,16 +83,16 @@ package("libca")
             collection = {"core"},
             config     = {"core", "json", "fs"},
             crypto     = {"core"},
-            csv        = {"core", "str"},
+            csv        = {"core", "str", "fs"},
             env        = {"core", "str"},
             fs         = {"core", "str"},
             http       = {"net", "thread", "str"},
             i18n       = {"core", "str"},
-            ini        = {"core", "str"},
+            ini        = {"core", "str", "fs"},
             io         = {"core", "str"},
             json       = {"core", "str", "fs"},
             log        = {"core", "str"},
-            net        = {"io", "str"},
+            net        = {"io", "str", "collection"},
             opt        = {"core", "str"},
             process    = {"core", "str"},
             random     = {"core", "crypto"},
@@ -100,10 +101,10 @@ package("libca")
             test       = {"core"},
             thread     = {"core", "str"},
             time       = {"core"},
-            toml       = {"core", "str"},
+            toml       = {"core", "str", "fs"},
             uuid       = {"core", "crypto"},
-            xml        = {"core", "str"},
-            yaml       = {"core", "str"},
+            xml        = {"core", "str", "fs"},
+            yaml       = {"core", "str", "fs"},
             zip        = {"core"}
         }
         local requested = {}
@@ -180,7 +181,10 @@ package("libca")
         if package:version():lt("0.0.7") then
             configs.with_em = false
         end
-        configs.with_demo = false
+        -- with_demo 自 0.0.14 起从 libca 删除（仓库本无 demo target），仅对旧版本传递。
+        if package:version():lt("0.0.14") then
+            configs.with_demo = false
+        end
         configs.with_tests = false
         -- 开关按版本门槛传递：xmake 对未定义 option 报 Invalid option 硬错。
         -- with_spdlog 自 0.0.4（2026-08-23）引入；with_zip 自 0.0.6（2026-09-03）引入。
