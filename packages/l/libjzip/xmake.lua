@@ -11,7 +11,8 @@
 -- xmake.lua 已声明 libca 0.0.13（modules=core,zip,test）与 zlib 依赖，
 -- 包沙箱内自解析；下方 add_deps 是给消费方的传递声明（另一回事，不可省）：
 --   - libca：公开头包含 libca/core/*.hpp，实现引用 ca::zip::ZipFile/Crc32
---     （libca_zip），消费方须拿到 core+zip 两个模块的头与库。
+--     （libca_zip）。libca modules 取 luiox 家族统一超集 core,str,log,crypto,zip
+--     （同一消费图内各包配置必须一致，否则 xmake 报冲突）。
 --   - zlib：实现层 8 个文件直接调用 zlib（uncompress/compress 等），静态库
 --     留未解析符号，消费方须链 zlib（同 libca 包对 fmt 的传递声明先例）。
 
@@ -28,7 +29,7 @@ package("libjzip")
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略任一条，消费方分别在
     -- 编译期（libca 头）或链接期（libca_zip/zlib 符号）炸 LNK2019/C1083。
-    add_deps("libca", {configs = {modules = "core,zip"}})
+    add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
     add_deps("zlib")
 
     on_load(function (package)

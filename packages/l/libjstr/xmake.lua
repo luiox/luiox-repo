@@ -10,8 +10,10 @@
 -- 链接说明：整包单库（links = libjstr），无模块拆分。libjstr 工程自身
 -- xmake.lua 已声明 libca 0.0.13（modules=core,str）依赖，包沙箱内自解析；
 -- 下方 add_deps 是给消费方的传递声明（另一回事，不可省）：
---   - libca：公开头包含 libca/core/*.hpp，实现引用 ca::str 符号（libca_str），
---     消费方须拿到 core+str 两个模块的头与库（同 libca 包对 fmt 的传递声明先例）。
+--   - libca / zlib：公开头包含 libca/core/*.hpp，实现引用 ca::str 符号（libca_str）。
+--     libca modules 取 luiox 家族统一超集 core,str,log,crypto,zip（同一消费图内
+--     各包的 libca 配置必须一致，否则 xmake 报 conflict configs dependencies）；
+--     zip 模块链接需要 zlib，随包传递声明。
 
 package("libjstr")
     set_homepage("https://github.com/luiox/libjstr")
@@ -26,7 +28,8 @@ package("libjstr")
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略则消费方分别在编译期
     -- （libca 头）或链接期（libca_str 符号）炸 C1083/LNK2019。
-    add_deps("libca", {configs = {modules = "core,str"}})
+    add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
+    add_deps("zlib")
 
     on_load(function (package)
         package:add("links", "libjstr")
