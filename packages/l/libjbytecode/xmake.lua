@@ -30,6 +30,7 @@ package("libjbytecode")
     -- 语义版本名 + 锁定 commit。版本条目只追加、不修改。
     -- 0.0.1 = 首个独立仓基线（五子库 + 聚合库，MIT）。
     add_versions("0.0.1", "06d67cde4b9fa357e06c95b80107259624134f06") -- 迁移基线     2026-10-10
+    add_versions("0.0.2", "bcaea4a7245ba657e4f24ce920c29300fa49ecc7") -- libca 0.0.14 + 家族 0.0.2（1141 用例全绿） 2026-10-11
 
     add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
     add_deps("zlib")
