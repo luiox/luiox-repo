@@ -8,7 +8,7 @@
 -- （既有条目只追加不修改，见 README 可复现纪律）；消费项目自行择机升级。
 --
 -- 链接说明：整包单库（links = libgarena），无模块拆分。libgarena 工程自身
--- xmake.lua 已声明 libca 0.0.13（modules=core）依赖，包沙箱内自解析；
+-- xmake.lua 自声明 libca 依赖（modules=core，随库升级换版），包沙箱内自解析；
 -- 下方 add_deps 是给消费方的传递声明（另一回事，不可省）：
 --   - libca / zlib：公开头包含 libca/core/*.hpp（ca::usize 等类型别名），实现
 --     引用 libca_core 符号。libca modules 取 luiox 家族统一超集
@@ -25,6 +25,7 @@ package("libgarena")
     -- 语义版本名 + 锁定 commit。版本条目只追加、不修改。
     -- 0.0.1 = 首个独立仓基线（v2 双层架构，MIT）。
     add_versions("0.0.1", "87eb9c73be7aff15d24dc73621371d1ffe0997bd") -- 迁移基线     2026-10-10
+    add_versions("0.0.2", "004da98343a6b8bc57662593f5b9c3761265ad61") -- libca 0.0.14 2026-10-11
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略则消费方分别在编译期
     -- （libca 头）或链接期（libca_core 符号）炸 C1083/LNK2019。

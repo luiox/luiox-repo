@@ -8,7 +8,7 @@
 -- （既有条目只追加不修改，见 README 可复现纪律）；消费项目自行择机升级。
 --
 -- 链接说明：整包单库（links = libjzip），无模块拆分。libjzip 工程自身
--- xmake.lua 已声明 libca 0.0.13（modules=core,zip,test）与 zlib 依赖，
+-- xmake.lua 自声明 libca 依赖（modules=core,zip,test，随库升级换版）与 zlib 依赖，
 -- 包沙箱内自解析；下方 add_deps 是给消费方的传递声明（另一回事，不可省）：
 --   - libca：公开头包含 libca/core/*.hpp，实现引用 ca::zip::ZipFile/Crc32
 --     （libca_zip）。libca modules 取 luiox 家族统一超集 core,str,log,crypto,zip
@@ -26,6 +26,7 @@ package("libjzip")
     -- 语义版本名 + 锁定 commit。版本条目只追加、不修改。
     -- 0.0.1 = 首个独立仓基线（自 上游项目 libs/libjzip 快照迁移，MIT）。
     add_versions("0.0.1", "9d7cc2036f274da35f93cd9e9852ea30b7792db4") -- 迁移基线     2026-10-10
+    add_versions("0.0.2", "9ce2357361339d66fea4b3fc4d79e5aad29a57b7") -- libca 0.0.14 2026-10-11
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略任一条，消费方分别在
     -- 编译期（libca 头）或链接期（libca_zip/zlib 符号）炸 LNK2019/C1083。

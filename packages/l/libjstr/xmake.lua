@@ -8,7 +8,7 @@
 -- （既有条目只追加不修改，见 README 可复现纪律）；消费项目自行择机升级。
 --
 -- 链接说明：整包单库（links = libjstr），无模块拆分。libjstr 工程自身
--- xmake.lua 已声明 libca 0.0.13（modules=core,str）依赖，包沙箱内自解析；
+-- xmake.lua 自声明 libca 依赖（modules=core,str，随库升级换版），包沙箱内自解析；
 -- 下方 add_deps 是给消费方的传递声明（另一回事，不可省）：
 --   - libca / zlib：公开头包含 libca/core/*.hpp，实现引用 ca::str 符号（libca_str）。
 --     libca modules 取 luiox 家族统一超集 core,str,log,crypto,zip（同一消费图内
@@ -25,6 +25,7 @@ package("libjstr")
     -- 语义版本名 + 锁定 commit。版本条目只追加、不修改。
     -- 0.0.1 = 首个独立仓基线（命名空间定为 jstr，MIT）。
     add_versions("0.0.1", "f01d09a7dc740047af9d774868772aed71bdf771") -- 迁移基线     2026-10-10
+    add_versions("0.0.2", "feff166688838ef5e8469ca34a5fb5bbd88059fb") -- libca 0.0.14 2026-10-11
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略则消费方分别在编译期
     -- （libca 头）或链接期（libca_str 符号）炸 C1083/LNK2019。
