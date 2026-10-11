@@ -63,6 +63,11 @@ package("libca")
     -- 节无 [不兼容] 条目。
     add_versions("0.0.13", "b1d51dd3e6d1b8e9186e560290fc4a2dbe5be4f9") -- opt HelpTable+fs 测试 2026-10-03
     add_versions("0.0.14", "42412def256acc5476fc446c7a9df84c4671a254") -- fs::Path + 解析器 Path 化（闭包补 fs）；组名/文档纠偏 2026-10-10
+    -- zip Windows 非 ASCII 路径经 OsString→_wfopen（zip 新增 libca_str 直接依赖，
+    -- MODULE_DEPS 已同步）；json/ini/toml 数字转换 from_chars/to_chars locale 加固；
+    -- fs glob 手写匹配器弃 std::regex；str string_util 去 stringstream；测试侧
+    -- u8path 清零。上游 CHANGELOG [0.0.15] 无接口不兼容（zip 闭包新增 libca_str）。
+    add_versions("0.0.15", "f957c979a618d9e485eb1b343b18ebe292597df3") -- zip UTF-8 路径+locale 加固 2026-10-11
 
     -- libca_str 的 format.hpp 在公开头里包含 fmt/core.h，str 以 fmt(header-only)
     -- 为公开接口依赖——包必须传递声明，消费方才能拿到 fmt 的包含路径。
@@ -105,7 +110,7 @@ package("libca")
             uuid       = {"core", "crypto"},
             xml        = {"core", "str", "fs"},
             yaml       = {"core", "str", "fs"},
-            zip        = {"core"}
+            zip        = {"core", "str"}
         }
         local requested = {}
         local value = package:config("modules")
