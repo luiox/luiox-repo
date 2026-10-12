@@ -172,7 +172,7 @@ package("libca")
     -- （macos 的 dl/pthread 在 libSystem 内，无需声明）。
     -- Iphlpapi：net 模块 sock_util.cpp 的 interface_list 调 GetAdaptersAddresses
     -- （libca 50bb642 引入），缺失时包消费方链接报 LNK2019 __imp_GetAdaptersAddresses
-    -- （，mjt-mcp 实证）。
+    -- （消费方实测）。
     if is_plat("windows", "mingw") then
         add_syslinks("User32", "Gdi32", "Bcrypt", "DbgHelp", "Ws2_32", "Iphlpapi")
     elseif is_plat("linux") then
