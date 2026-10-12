@@ -21,8 +21,10 @@ package("libjclassfile")
     add_urls("https://github.com/luiox/libjclassfile.git")
 
     -- 语义版本名 + 锁定 commit。版本条目只追加、不修改。
-    -- 0.0.1 = 首个独立仓基线（独立仓首发，src/test/test_resource）。
-    add_versions("0.0.1", "1130c16f35cbcfeef6770ba1f8fb2362e5fc8ff1") -- 迁移基线     2026-10-12
+    -- 0.0.1 = 首个独立仓基线（命名空间未对齐发布版 libjstr，勿消费）。
+    -- 0.0.2 = jstr 命名空间对齐发布版 libjstr + 自研测试门面 + 双平台 CI。
+    add_versions("0.0.1", "1130c16f35cbcfeef6770ba1f8fb2362e5fc8ff1") -- 基线（勿消费）  2026-10-12
+    add_versions("0.0.2", "aabc22e1858279e2d98ef517d7d5160801b85c95") -- 命名空间对齐    2026-10-12
 
     add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
     add_deps("libjstr")
