@@ -22,6 +22,7 @@ package("libjdk_finder")
     -- 语义版本名 + 锁定 commit。版本条目只追加、不修改。
     -- 0.0.1 = 首个独立仓基线（命名空间 jdk_finder，MIT）。
     add_versions("0.0.1", "ee1b9c19ef6c146121020e60a0a1554fa46b1536") -- 迁移基线 2026-10-12
+    add_versions("0.0.2", "cc7712ec396a3334ce7dedfe9b2f7115e58f87b2") -- findVcvarsAll 枚举兜底（VS 2026）2026-10-14
 
     add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
 
