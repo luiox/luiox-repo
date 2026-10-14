@@ -1,0 +1,62 @@
+# luiox-repo CI（Linux）：测试本次推送/PR 变更的包
+#
+# 组织方式对齐 xmake-io/xmake-repo：按平台拆 workflow 文件，统一入口
+# `xmake l ./scripts/test.lua`，由脚本用 git diff（push 比对 event.before、
+# PR 比对 base sha，fetch-depth: 0）筛出变更包，只 require 变更的包。
+# xmake 钉 v3.0.9（与 luiox/libjbc/mjt 仓 CI 同版）。
+
+name: Linux
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+concurrency:
+  group: ci-linux-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: test packages (linux, ${{ matrix.mode }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [debug, release]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # full history so the diff base (event.before / PR base) exists
+          fetch-depth: 0
+
+      - name: Set diff base
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "LUIOX_DIFF_BASE=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_ENV"
+          else
+            echo "LUIOX_DIFF_BASE=${{ github.event.before }}" >> "$GITHUB_ENV"
+          fi
+
+      - name: Setup xmake
+        uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: v3.0.9
+          actions-cache-folder: '.xmake-cache'
+
+      - name: Cache xrepo packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.xmake/packages
+            ~/.local/share/xmake
+          key: luiox-repo-xrepo-linux-x64-xmake309-${{ matrix.mode }}-${{ hashFiles('packages/**/xmake.lua') }}
+          restore-keys: |
+            luiox-repo-xrepo-linux-x64-xmake309-${{ matrix.mode }}-
+            luiox-repo-xrepo-linux-x64-xmake309-
+
+      - name: Test changed packages
+        run: xmake l ./scripts/test.lua -D -p linux -m ${{ matrix.mode }}
