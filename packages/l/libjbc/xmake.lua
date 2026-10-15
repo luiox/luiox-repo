@@ -27,6 +27,8 @@ package("libjbc")
     add_versions("0.1.0", "78e8ad8ffd7e8c610e8af1123371c46ee3988318") -- v0.1.0 基线  2026-10-14
     -- 0.4.12 = typed 属性面 13 种 + CP 压缩 + 成员级增删/adopt + 子程序 strict 帧；MIT 定版。
     add_versions("0.4.12", "106cf8302255d18c84b247888724c29bd764a084") -- 重指 GCC 修正版（tag v0.4.12 同 commit；原 a7b12f0 MSVC-only） -- v0.4.12 快照  2026-10-15
+    -- 0.4.14 = Nest/Record 属性 typed 建模 + 嵌套属性表 CP 重映射 + nest/record 语料。
+    add_versions("0.4.14", "8a00e45613254ba7811b6f196e45afc98c435a9f") -- v0.4.14 快照  2026-10-15
 
     add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
 
