@@ -13,18 +13,20 @@
 -- luiox 家族统一超集 core,str,log,crypto,zip（同一消费图内各包的 libca
 -- 配置必须一致，否则 xmake 报 conflict configs dependencies）。
 --
--- 许可：libjbc 源仓暂未定 LICENSE 文件（README License TBD），故此处不声明
--- license；上游定版后随新版本条目补上。
+-- 许可：MIT（源仓 v0.4.12 起 LICENSE 落地）。
 
 package("libjbc")
     set_homepage("https://github.com/luiox/libjbc")
     set_description("node-first JVM bytecode library: lazy classfile DOM with fidelity write-back (git direct package)")
+    set_license("MIT")
 
     add_urls("https://github.com/luiox/libjbc.git")
 
     -- 语义版本名 + 锁定 commit。版本条目只追加、不修改。
     -- 0.1.0 = 首个独立仓基线（core/ir/analysis/type 四层，MIT 预期未定版）。
     add_versions("0.1.0", "78e8ad8ffd7e8c610e8af1123371c46ee3988318") -- v0.1.0 基线  2026-10-14
+    -- 0.4.12 = typed 属性面 13 种 + CP 压缩 + 成员级增删/adopt + 子程序 strict 帧；MIT 定版。
+    add_versions("0.4.12", "a7b12f091a750d30b0348d296394249b79eb7876") -- v0.4.12 快照  2026-10-15
 
     add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
 
