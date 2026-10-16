@@ -29,6 +29,8 @@ package("libjbc")
     add_versions("0.4.12", "106cf8302255d18c84b247888724c29bd764a084") -- 重指 GCC 修正版（tag v0.4.12 同 commit；原 a7b12f0 MSVC-only） -- v0.4.12 快照  2026-10-15
     -- 0.4.14 = Nest/Record 属性 typed 建模 + 嵌套属性表 CP 重映射 + nest/record 语料。
     add_versions("0.4.14", "8a00e45613254ba7811b6f196e45afc98c435a9f") -- v0.4.14 快照  2026-10-15
+    -- 0.4.15 = Module 族属性 typed 建模 + 压缩封闭集收编；首版测试树完整入库（此前 15+2 文件被忽略规则吞）。
+    add_versions("0.4.15", "9f1a13ec3df96f3493703ee3c6fbb7c5186187bf") -- v0.4.15 快照  2026-10-16
 
     add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
 
