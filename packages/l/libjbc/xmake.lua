@@ -39,6 +39,10 @@ package("libjbc")
         -- 语言标准传导：公开头使用 C++17（同 libjstr/libjclassfile 包口径）。
         if package:is_plat("windows") then
             package:add("cxxflags", "/std:c++17")
+            -- 公开头含 UTF-8 中文注释，on_test 探针（has_cxxincludes/
+            -- check_cxxsnippets 只吃这里的 cxxflags）在 GBK ACP 机器上按 GBK
+            -- 读源会把注释吞行致 C2059 级联，安装失败——必须显式 /utf-8。
+            package:add("cxxflags", "/utf-8")
         else
             package:add("cxxflags", "-std=c++17")
         end
