@@ -62,7 +62,7 @@ package("libjbc")
         if not os.isdir(path.join(includedir, "jbc")) then
             local staged = path.join(includedir, "jbc")
             os.mkdir(staged)
-            for _, entry in ipairs({"jbc.hpp", "analysis", "core", "ir", "type"}) do
+            for _, entry in ipairs({"jbc.hpp", "analysis", "consumer", "core", "ir", "type"}) do
                 os.mv(path.join(includedir, entry), path.join(staged, entry))
             end
         end
