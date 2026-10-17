@@ -31,6 +31,8 @@ package("libjbc")
     add_versions("0.4.14", "8a00e45613254ba7811b6f196e45afc98c435a9f") -- v0.4.14 快照  2026-10-15
     -- 0.4.15 = Module 族属性 typed 建模 + 压缩封闭集收编；首版测试树完整入库（此前 15+2 文件被忽略规则吞）。
     add_versions("0.4.15", "9f1a13ec3df96f3493703ee3c6fbb7c5186187bf") -- v0.4.15 快照  2026-10-16
+    -- 0.4.16 = 里程碑发版：类构建挂载面 + BSM intern 家族 + 消费者协议面（jbc::consumer）+ docs 全量归位 + boar 实语料验证。
+    add_versions("0.4.16", "edce61d83be812b933731142b811d82c347b3fc0") -- v0.4.16 发版 main 头  2026-10-17
 
     add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
 
