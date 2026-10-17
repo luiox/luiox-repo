@@ -42,7 +42,7 @@ GIT_CONFIG_KEY_1=https.proxy GIT_CONFIG_VALUE_1= xmake ...
 | 包 | 版本 | 源码 |
 |---|---|---|
 | [libca](packages/l/libca/xmake.lua) | 0.0.1 – 0.0.8 | [luiox/libca](https://github.com/luiox/libca) |
-| [libjbc](packages/l/libjbc/xmake.lua) | 0.1.0 | [luiox/libjbc](https://github.com/luiox/libjbc) |
+| [libjbc](packages/l/libjbc/xmake.lua) | 0.1.0 – 0.4.16 | [luiox/libjbc](https://github.com/luiox/libjbc) |
 | [libmcp](packages/l/libmcp/xmake.lua) | 0.0.1 – 0.0.2 | [luiox/libmcp](https://github.com/luiox/libmcp) |
 | [micon](packages/m/micon/xmake.lua) | 0.2.0 | [luiox/micon](https://github.com/luiox/micon) |
 | [duilib](packages/d/duilib/xmake.lua) | 0.1.0 | [luiox/DuiLib_DuiEditor](https://github.com/luiox/DuiLib_DuiEditor) |
