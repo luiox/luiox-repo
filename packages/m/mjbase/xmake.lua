@@ -8,13 +8,15 @@
 -- （keys.hpp / i18n.hpp / util.hpp），模块目录头（hierarchy/spi/asm/…）随
 -- src 一并导出；翻译文案表已内嵌进库本体（cli ArgParser 单源无下游覆盖时兜底）。
 --
--- 消费方自备依赖（不在 luiox-repo，各自内联/源内目标；须与安装构建闭包一致
--- 避免实例分裂）：
---   - libjbc：morpher/mjbase 各自 xmake/packages/libjbc.lua 内联（当前 0.4.15）；
---     mjbase 的 ir/sir 消费面直连 libjbc DOM。
---   - libjstd / libjhasm / libjblw / libjbytecode / libjclassfile /
---     libjdk_finder：morpher 仓内已有 shim/源目标；mjbase 的 jasm 文本面与
---     classfile 前置清洗级沿 libjhasm→libjblw→libjbytecode 链解析。
+-- 消费方自备依赖（不在本包 add_deps 面，各自内联/源内目标；须与安装构建
+-- 闭包一致避免实例分裂）：
+--   - libjstd / libjhasm / libjblw / libjdk_finder：morpher 仓内已有 shim/
+--     源目标；mjbase 的 jasm 文本面沿 libjhasm→libjblw→libjbytecode 链解析
+--     （jhasm/jblw 为源仓链接层传递边，包面不显式声明）。
+--
+-- 包级显式依赖（与源仓根 xmake.lua require 清单一字面对齐，消实例分裂）：
+--   - libca 0.0.16 统一超集 modules；libjbc 0.4.15（ir/sir 消费面直连 DOM）
+--   - libjstr / libjbytecode / libjzip / libgarena 0.0.3 + libjclassfile 0.0.2
 --   - libarchive 3.8.8（openssl3=false）：model 的资源解包后端，安装期在包
 --     沙箱内经源仓 mjbase-repo 本地覆盖仓自足构建；消费方若自身亦依赖
 --     libarchive 需同配置对齐。
@@ -39,9 +41,12 @@ package("mjbase")
     -- 实例（链接闭包多条 -libpath）。
     add_deps("libca", {configs = {modules = "core,crypto,str,fs,env,io,json,net,http,process,opt,thread,log,zip,resources,i18n,test"}})
     add_deps("zlib")
+    add_deps("libjbc 0.4.15")
     add_deps("libjstr")
     add_deps("libgarena")
     add_deps("libjzip")
+    add_deps("libjbytecode")
+    add_deps("libjclassfile")
 
     on_load(function (package)
         package:add("links", "mjbase")
