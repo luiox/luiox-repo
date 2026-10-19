@@ -26,7 +26,10 @@ package("libjclassfile")
     add_versions("0.0.1", "1130c16f35cbcfeef6770ba1f8fb2362e5fc8ff1") -- 基线（勿消费）  2026-10-12
     add_versions("0.0.2", "aabc22e1858279e2d98ef517d7d5160801b85c95") -- 命名空间对齐    2026-10-12
 
-    add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
+    -- libca modules 对齐消费项目（mjbase/mjt）LUIOX_LIBCA_MODULES 家族统一
+    -- 超集：包定义 add_deps 不吃消费方 requireconfs（实测），更小模块集会让
+    -- 消费图多出一个 libca 实例（链接闭包多条 -libpath）。
+    add_deps("libca", {configs = {modules = "core,crypto,str,fs,env,io,json,net,http,process,opt,thread,log,zip,resources,i18n,test"}})
     add_deps("libjstr")
 
     on_load(function (package)

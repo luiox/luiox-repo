@@ -23,7 +23,10 @@ package("libjstd")
     -- 0.0.1 = 首个独立仓基线（命名空间 jstd，MIT，headeronly）。
     add_versions("0.0.1", "ce7cfc15bf297a655a9d4cbf12a130f8f1516aa4") -- 迁移基线 2026-10-12
 
-    add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
+    -- libca modules 对齐消费项目（mjbase/mjt）LUIOX_LIBCA_MODULES 家族统一
+    -- 超集：包定义 add_deps 不吃消费方 requireconfs（实测），更小模块集会让
+    -- 消费图多出一个 libca 实例（链接闭包多条 -libpath）。
+    add_deps("libca", {configs = {modules = "core,crypto,str,fs,env,io,json,net,http,process,opt,thread,log,zip,resources,i18n,test"}})
 
     on_load(function (package)
         -- 语言标准传导：公开头使用 C++17（同 libca 包口径）。

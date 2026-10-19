@@ -32,7 +32,10 @@ package("libjbytecode")
     add_versions("0.0.1", "06d67cde4b9fa357e06c95b80107259624134f06") -- 迁移基线     2026-10-10
     add_versions("0.0.2", "bcaea4a7245ba657e4f24ce920c29300fa49ecc7") -- libca 0.0.14 + 家族 0.0.2（1141 用例全绿） 2026-10-11
 
-    add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
+    -- libca modules 对齐消费项目（mjbase/mjt）LUIOX_LIBCA_MODULES 家族统一
+    -- 超集：包定义 add_deps 不吃消费方 requireconfs（实测），更小模块集会让
+    -- 消费图多出一个 libca 实例（链接闭包多条 -libpath）。
+    add_deps("libca", {configs = {modules = "core,crypto,str,fs,env,io,json,net,http,process,opt,thread,log,zip,resources,i18n,test"}})
     add_deps("zlib")
     add_deps("libjstr")
     add_deps("libgarena")

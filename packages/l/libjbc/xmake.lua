@@ -34,7 +34,10 @@ package("libjbc")
     -- 0.4.16 = 里程碑发版：类构建挂载面 + BSM intern 家族 + 消费者协议面（jbc::consumer）+ docs 全量归位 + boar 实语料验证。
     add_versions("0.4.16", "edce61d83be812b933731142b811d82c347b3fc0") -- v0.4.16 发版 main 头  2026-10-17
 
-    add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
+    -- libca modules 对齐消费项目（mjbase/mjt）LUIOX_LIBCA_MODULES 家族统一
+    -- 超集：包定义 add_deps 不吃消费方 requireconfs（实测），更小模块集会让
+    -- 消费图多出一个 libca 实例（链接闭包多条 -libpath）。
+    add_deps("libca", {configs = {modules = "core,crypto,str,fs,env,io,json,net,http,process,opt,thread,log,zip,resources,i18n,test"}})
 
     on_load(function (package)
         package:add("links", "libjbc")

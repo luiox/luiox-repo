@@ -30,7 +30,10 @@ package("libjzip")
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略任一条，消费方分别在
     -- 编译期（libca 头）或链接期（libca_zip/zlib 符号）炸 LNK2019/C1083。
-    add_deps("libca", {configs = {modules = "core,str,log,crypto,zip"}})
+    -- libca modules 对齐消费项目（mjbase/mjt）LUIOX_LIBCA_MODULES 家族统一
+    -- 超集：包定义 add_deps 不吃消费方 requireconfs（实测），更小模块集会让
+    -- 消费图多出一个 libca 实例（链接闭包多条 -libpath）。
+    add_deps("libca", {configs = {modules = "core,crypto,str,fs,env,io,json,net,http,process,opt,thread,log,zip,resources,i18n,test"}})
     add_deps("zlib")
 
     on_load(function (package)
