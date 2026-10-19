@@ -25,10 +25,13 @@ package("libjdk_finder")
     add_versions("0.0.2", "cc7712ec396a3334ce7dedfe9b2f7115e58f87b2") -- findVcvarsAll 枚举兜底（VS 2026）2026-10-14
     add_versions("0.1.0", "30c4012890123fb8685c7823b61f4c0a7a3e99bb") -- API snake_case（破坏性）+ 默认安装位置扫描与 java 版本/发行商查询 2026-10-17
 
-    -- libca modules：core/str/log/crypto/zip 是族仓统一公设；fs/env 由本库
-    -- 0.1.0 实现依赖（FileUtil 枚举、ca::fs::Path 编码边界、ca::env 读取），
-    -- 不进传递 links 时消费方链接期缺符号。
-    add_deps("libca", {configs = {modules = "core,fs,env,str,log,crypto,zip"}})
+    -- libca modules：对齐消费项目（mjbase/mjt）root xmake.lua 的
+    -- LUIOX_LIBCA_MODULES 家族统一超集。包定义 add_deps 不吃消费方的
+    -- requireconfs（实测，沙箱嵌套自解析），任何更小的模块集都会让消费图
+    -- 多出一个 libca 实例（链接闭包多条 -libpath）。本库 0.1.0 依赖的
+    -- fs/env（FileUtil 枚举、ca::fs::Path 编码边界、ca::env 读取）均在
+    -- 超集内，超集化无损；版本走裸名，由消费图的 libca 版本决议。
+    add_deps("libca", {configs = {modules = "core,crypto,str,fs,env,io,json,net,http,process,opt,thread,log,zip,resources,i18n,test"}})
 
     on_load(function (package)
         package:add("links", "libjdk_finder")
