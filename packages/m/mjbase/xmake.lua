@@ -1,0 +1,67 @@
+-- mjbase 包定义（本仓只存定义，源码来自 github.com/luiox/mjbase）
+--
+-- 机制同 libjbytecode：add_urls 指向 git 仓库 + add_versions 第二参数锁 commit。
+-- 发版/升级：在 mjbase 仓库定版后于此文件 add_versions 追加新版本条目
+-- （既有条目只追加不修改）；消费项目自行择机升级。
+--
+-- 链接说明：包导出单库 mjbase。公开头跨模块伞头在 src/mjbase 根
+-- （keys.hpp / i18n.hpp / util.hpp），模块目录头（hierarchy/spi/asm/…）随
+-- src 一并导出；翻译文案表已内嵌进库本体（cli ArgParser 单源无下游覆盖时兜底）。
+--
+-- 消费方自备依赖（不在 luiox-repo，各自内联/源内目标；须与安装构建闭包一致
+-- 避免实例分裂）：
+--   - libjbc：morpher/mjbase 各自 xmake/packages/libjbc.lua 内联（当前 0.4.15）；
+--     mjbase 的 ir/sir 消费面直连 libjbc DOM。
+--   - libjstd / libjhasm / libjblw / libjbytecode / libjclassfile /
+--     libjdk_finder：morpher 仓内已有 shim/源目标；mjbase 的 jasm 文本面与
+--     classfile 前置清洗级沿 libjhasm→libjblw→libjbytecode 链解析。
+--   - libarchive 3.8.8（openssl3=false）：model 的资源解包后端，安装期在包
+--     沙箱内经源仓 mjbase-repo 本地覆盖仓自足构建；消费方若自身亦依赖
+--     libarchive 需同配置对齐。
+--
+-- 包级验证以首个消费方（morpher mjt-dump 换轨批次）实际 add_requires 为准。
+
+package("mjbase")
+    set_homepage("https://github.com/luiox/mjbase")
+    set_description("Cross-class JVM program analysis & transformation base on libjbc (keys/hierarchy/asm/pass pipeline; git direct package)")
+    set_license("MIT")
+
+    add_urls("https://github.com/luiox/mjbase.git")
+
+    -- 语义版本名 + 锁定 commit。版本条目只追加、不修改。
+    -- 0.0.1 = 首个独立仓发版（268 源文件；morpher 仓内副本的 air/sir deobf IR
+    -- 按归属裁决不入 mjbase，随 mjt-deobf 持有）。测试面含救回的 keys/i18n/util
+    -- 第 5 批孤儿测试（Windows 本机预存 4 例 storeLock* 红不计入其它平台）。
+    add_versions("0.0.1", "8b682de4160c4c60cd08200f2aa36af9ad73c41b") -- 首发基线 + 孤儿测试面救回 2026-10-19
+
+    -- libca modules 对齐消费项目（morpher/mjbase）统一超集：包定义 add_deps
+    -- 不吃消费方 requireconfs（实测），更小模块集会让消费图多出一个 libca
+    -- 实例（链接闭包多条 -libpath）。
+    add_deps("libca", {configs = {modules = "core,crypto,str,fs,env,io,json,net,http,process,opt,thread,log,zip,resources,i18n,test"}})
+    add_deps("zlib")
+    add_deps("libjstr")
+    add_deps("libgarena")
+    add_deps("libjzip")
+
+    on_load(function (package)
+        package:add("links", "mjbase")
+        if package:is_plat("windows") then
+            package:add("cxxflags", "/std:c++17")
+            -- bcrypt：libca crypto NT 系；xmllite：包内 libarchive 静态成员的
+            -- xar 读符号（final link 需要，public 语义同源仓 target）。
+            package:add("syslinks", "bcrypt", "xmllite")
+        else
+            package:add("cxxflags", "-std=c++17")
+        end
+    end)
+
+    on_install("windows", "linux", "macosx", function (package)
+        -- 包安装只装库本体：unittest 均为开发态目标。
+        import("package.tools.xmake").install(package, {with_tests = false})
+    end)
+
+    on_test(function (package)
+        -- 编译面自检：跨模块伞头 + 深目录头沿安装 include 根解析成功。
+        assert(package:has_cxxincludes("mjbase/keys.hpp", {configs = {languages = "cxx17"}}))
+        assert(package:has_cxxincludes("mjbase/hierarchy/class_hierarchy.hpp", {configs = {languages = "cxx17"}}))
+    end)
