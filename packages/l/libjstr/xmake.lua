@@ -26,6 +26,11 @@ package("libjstr")
     -- 0.0.1 = 首个独立仓基线（命名空间定为 jstr，MIT）。
     add_versions("0.0.1", "f01d09a7dc740047af9d774868772aed71bdf771") -- 迁移基线     2026-10-10
     add_versions("0.0.2", "feff166688838ef5e8469ca34a5fb5bbd88059fb") -- libca 0.0.14 2026-10-11
+    -- 0.0.3 = strict UTF-8 解码边界修复（C0/C1 overlong 与 F5-F7 越界 lead 拒绝、
+    -- 截断独立报 kUnexpectedEnd、validate 恒按 strict）+ unittest 16 个边界用例 +
+    -- README 门面重写；libca 锁 0.0.16。错误码分类变化见上游 design.md「错误分类」
+    -- 节：UTF-8 截断自 kInvalidUtf8Sequence 改报 kUnexpectedEnd。
+    add_versions("0.0.3", "d887e154ddb71c2ae9d7b134e04b014185178bd0") -- strict 解码边界 + libca 0.0.16 2026-10-19
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略则消费方分别在编译期
     -- （libca 头）或链接期（libca_str 符号）炸 C1083/LNK2019。

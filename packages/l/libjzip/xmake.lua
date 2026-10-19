@@ -27,6 +27,10 @@ package("libjzip")
     -- 0.0.1 = 首个独立仓基线（自 上游项目 libs/libjzip 快照迁移，MIT）。
     add_versions("0.0.1", "9d7cc2036f274da35f93cd9e9852ea30b7792db4") -- 迁移基线     2026-10-10
     add_versions("0.0.2", "9ce2357361339d66fea4b3fc4d79e5aad29a57b7") -- libca 0.0.14 2026-10-11
+    -- 0.0.3 = 质量审查修缮：ZIP64 窗口下限早退（封伪造 locator / 无符号下溢 / 越界
+    -- 读）、写侧 zlib uInt 上限防线、测试 skip 审计与 AdaptingZipReaderTests 移植、
+    -- 死代码清理；libca 锁 0.0.16。[不兼容] 公共头移除零调用点的 readJvmStrict。
+    add_versions("0.0.3", "6173feefd1a73ce1bdd926332a74cb39c64a408e") -- 健壮性修缮 + libca 0.0.16 2026-10-19
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略任一条，消费方分别在
     -- 编译期（libca 头）或链接期（libca_zip/zlib 符号）炸 LNK2019/C1083。

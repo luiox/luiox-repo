@@ -26,6 +26,10 @@ package("libgarena")
     -- 0.0.1 = 首个独立仓基线（v2 双层架构，MIT）。
     add_versions("0.0.1", "87eb9c73be7aff15d24dc73621371d1ffe0997bd") -- 迁移基线     2026-10-10
     add_versions("0.0.2", "004da98343a6b8bc57662593f5b9c3761265ad61") -- libca 0.0.14 2026-10-11
+    -- 0.0.3 = 质量审查修缮：ensureSlots 补槽位 u32 域上限（越过 kInvalidSlot 走
+    -- abortSizeOverflow），createArray 值初始化 / owns 口径注释与文档对齐，测试补
+    -- 缺与双配置 skip 审计，README 门面重写；libca 锁 0.0.16。无接口变更。
+    add_versions("0.0.3", "dcb27ce94cf69dba76cad459fee1eae41065e74f") -- 质量审查修缮 + libca 0.0.16 2026-10-19
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略则消费方分别在编译期
     -- （libca 头）或链接期（libca_core 符号）炸 C1083/LNK2019。
