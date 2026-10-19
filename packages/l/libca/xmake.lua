@@ -68,6 +68,11 @@ package("libca")
     -- fs glob 手写匹配器弃 std::regex；str string_util 去 stringstream；测试侧
     -- u8path 清零。上游 CHANGELOG [0.0.15] 无接口不兼容（zip 闭包新增 libca_str）。
     add_versions("0.0.15", "f957c979a618d9e485eb1b343b18ebe292597df3") -- zip UTF-8 路径+locale 加固 2026-10-11
+    -- 0.0.16 = fs 读路径 iostream→C stdio（stdio_file.hpp 公开头 StdioFile /
+    -- open_stdio / read_file_all，六个解析器 read_file 接入，读失败消息
+    -- failed to read）；crypto SHA-3 按 FIPS 202 重写（NIST 官方向量锁定）。
+    -- 上游 CHANGELOG [0.0.16] 无接口不兼容。
+    add_versions("0.0.16", "38deb16fe1fc97ee00e5bea3d38ee06a1b12874d") -- fs 读 stdio + SHA-3 重写 2026-10-19
 
     -- libca_str 的 format.hpp 在公开头里包含 fmt/core.h，str 以 fmt(header-only)
     -- 为公开接口依赖——包必须传递声明，消费方才能拿到 fmt 的包含路径。
