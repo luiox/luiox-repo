@@ -48,7 +48,7 @@ GIT_CONFIG_KEY_1=https.proxy GIT_CONFIG_VALUE_1= xmake ...
 | [libjzip](packages/l/libjzip/xmake.lua) | 0.0.1 – 0.0.3 | [luiox/libjzip](https://github.com/luiox/libjzip) |
 | [libjbytecode](packages/l/libjbytecode/xmake.lua) | 0.0.1 – 0.0.3 | [luiox/libjbytecode](https://github.com/luiox/libjbytecode) |
 | [libmcp](packages/l/libmcp/xmake.lua) | 0.0.1 – 0.0.2 | [luiox/libmcp](https://github.com/luiox/libmcp) |
-| [mjbase](packages/m/mjbase/xmake.lua) | 0.0.1 | [luiox/mjbase](https://github.com/luiox/mjbase) |
+| [mjbase](packages/m/mjbase/xmake.lua) | 0.0.1 – 0.0.2 | [luiox/mjbase](https://github.com/luiox/mjbase) |
 | [micon](packages/m/micon/xmake.lua) | 0.2.0 | [luiox/micon](https://github.com/luiox/micon) |
 | [duilib](packages/d/duilib/xmake.lua) | 0.1.0 | [luiox/DuiLib_DuiEditor](https://github.com/luiox/DuiLib_DuiEditor) |
 | [uikit](packages/u/uikit/xmake.lua) | 0.1.0 | [luiox/uikit](https://github.com/luiox/uikit) |

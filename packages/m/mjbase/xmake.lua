@@ -35,6 +35,7 @@ package("mjbase")
     -- 按归属裁决不入 mjbase，随 mjt-deobf 持有）。测试面含救回的 keys/i18n/util
     -- 第 5 批孤儿测试（Windows 本机预存 4 例 storeLock* 红不计入其它平台）。
     add_versions("0.0.1", "31e6e7f304a524e7a2e0e41e0e474833905e96d0") -- 首发基线 + 孤儿测试面救回 + 导出捕获修正 2026-10-19
+    add_versions("0.0.2", "f87aa3e0bffdd62996a59bc7cdddfeb69a6bd0ae") -- i18n 生成头回源（导出面补齐生成件，on_test 加 mjbase/i18n.hpp 直验）2026-10-19
 
     -- libca modules 对齐消费项目（morpher/mjbase）统一超集：包定义 add_deps
     -- 不吃消费方 requireconfs（实测），更小模块集会让消费图多出一个 libca
@@ -66,7 +67,10 @@ package("mjbase")
     end)
 
     on_test(function (package)
-        -- 编译面自检：跨模块伞头 + 深目录头沿安装 include 根解析成功。
+        -- 编译面自检：跨模块伞头 + 深目录头沿安装 include 根解析成功；
+        -- i18n.hpp 直验生成头回源随包出仓（首版 0.0.1 漏生成件，
+        -- 消费方 mjt-deobf sir_verifier 实证 C1083 后补）。
         assert(package:has_cxxincludes("mjbase/keys.hpp", {configs = {languages = "cxx17"}}))
         assert(package:has_cxxincludes("mjbase/hierarchy/class_hierarchy.hpp", {configs = {languages = "cxx17"}}))
+        assert(package:has_cxxincludes("mjbase/i18n.hpp", {configs = {languages = "cxx17"}}))
     end)
