@@ -65,8 +65,12 @@ package("libjbc")
         if not os.isdir(path.join(includedir, "jbc")) then
             local staged = path.join(includedir, "jbc")
             os.mkdir(staged)
+            -- consumer/ 自 0.4.16 起才进安装面，旧版本词条无此目录。
             for _, entry in ipairs({"jbc.hpp", "analysis", "consumer", "core", "ir", "type"}) do
-                os.mv(path.join(includedir, entry), path.join(staged, entry))
+                local src = path.join(includedir, entry)
+                if os.isfile(src) or os.isdir(src) then
+                    os.mv(src, path.join(staged, entry))
+                end
             end
         end
         os.tryrm(path.join(package:installdir(), "lib", "test_helper.lib"))
