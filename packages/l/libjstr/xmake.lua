@@ -31,6 +31,13 @@ package("libjstr")
     -- README 门面重写；libca 锁 0.0.16。错误码分类变化见上游 design.md「错误分类」
     -- 节：UTF-8 截断自 kInvalidUtf8Sequence 改报 kUnexpectedEnd。
     add_versions("0.0.3", "d887e154ddb71c2ae9d7b134e04b014185178bd0") -- strict 解码边界 + libca 0.0.16 2026-10-19
+    -- 0.0.4 = 审计修正 + JVM String 码元桥：校验错误分类精确化（UTF-8/MUTF-8
+    -- 两侧区分 kInvalidUtf8Sequence / kInvalidMutf8Sequence，截断报 kUnexpectedEnd）、
+    -- lenient 替换粒度改按 maximal subpart（一个畸形序列只产出一个 U+FFFD）、
+    -- 空视图 data()==nullptr 不再越界。[不兼容] 错误码枚举移除 kUnsupportedCodePoint。
+    -- 新增 mutf8_to_wtf8 拥有型重载与 mutf8_to_utf16 / utf16_to_mutf8 码元桥
+    -- （Mutf8ToUtf16Options 可选容忍混淆器裸 NUL 与标准 UTF-8 四字节，默认拒绝）。
+    add_versions("0.0.4", "ed45844467d324045fcbfe8becd32dd7a6ee5228") -- 审计修正 + UTF-16 码元桥 2026-10-21
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略则消费方分别在编译期
     -- （libca 头）或链接期（libca_str 符号）炸 C1083/LNK2019。

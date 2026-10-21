@@ -31,6 +31,13 @@ package("libjzip")
     -- 读）、写侧 zlib uInt 上限防线、测试 skip 审计与 AdaptingZipReaderTests 移植、
     -- 死代码清理；libca 锁 0.0.16。[不兼容] 公共头移除零调用点的 readJvmStrict。
     add_versions("0.0.3", "6173feefd1a73ce1bdd926332a74cb39c64a408e") -- 健壮性修缮 + libca 0.0.16 2026-10-19
+    -- 0.0.4 = 边界与写入器修缮合入：读路径边界检查改减法比较（拒绝负 baseOffset
+    -- 映射）、DirectZipWriter 拒绝超出 ZIP32 宽度的字段、JVM 读取零长度条目不再
+    -- 吞掉后续结构、CopyingZipPartMapper 返回独立深拷贝（深拷贝不保留 LOC/CEN
+    -- 互链，应置于映射链末端）、RecompressingZipWriter 不丢条目并按
+    -- defaultEntryOutputCap 限制解压输出。接口纯新增（decompressor.hpp 增
+    -- defaultEntryOutputCap）。CI pull_request 触发放宽到 fix/**，治理文件对齐。
+    add_versions("0.0.4", "cf7d2e2bb8bcd88aec1b8f31aaff0a8272a29cf0") -- ZIP32 边界 + 写入器修缮 2026-10-21
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略任一条，消费方分别在
     -- 编译期（libca 头）或链接期（libca_zip/zlib 符号）炸 LNK2019/C1083。

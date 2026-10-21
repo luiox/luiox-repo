@@ -30,6 +30,12 @@ package("libgarena")
     -- abortSizeOverflow），createArray 值初始化 / owns 口径注释与文档对齐，测试补
     -- 缺与双配置 skip 审计，README 门面重写；libca 锁 0.0.16。无接口变更。
     add_versions("0.0.3", "dcb27ce94cf69dba76cad459fee1eae41065e74f") -- 质量审查修缮 + libca 0.0.16 2026-10-19
+    -- 0.0.4 = Layer B 契约修正：构造期槽元数据不再持有跨构造期引用（重入
+    -- create/reserve 受支持）、析构借用断言不按 live_count_ 短路、kNoHandle
+    -- 先于 owner 检查报告（空句柄 get 统一 abort）。CONTRIBUTING/SECURITY
+    -- 对齐仓库实际边界；CI 新增 Linux debug 作业并对库源启用 ASan 插桩。
+    -- 无接口签名变更（行为按契约收紧）。
+    add_versions("0.0.4", "9df0bfcab9e39b8441594cb49ad695b40b8c09ee") -- 契约修正 + CI/ASan 2026-10-21
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略则消费方分别在编译期
     -- （libca 头）或链接期（libca_core 符号）炸 C1083/LNK2019。
