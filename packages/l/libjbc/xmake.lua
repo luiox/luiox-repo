@@ -33,6 +33,10 @@ package("libjbc")
     add_versions("0.4.15", "9f1a13ec3df96f3493703ee3c6fbb7c5186187bf") -- v0.4.15 快照  2026-10-16
     -- 0.4.16 = 里程碑发版：类构建挂载面 + BSM intern 家族 + 消费者协议面（jbc::consumer）+ docs 全量归位 + boar 实语料验证。
     add_versions("0.4.16", "edce61d83be812b933731142b811d82c347b3fc0") -- v0.4.16 发版 main 头  2026-10-17
+    -- 0.4.17 = consumer 模块移除（协议面归上层仓单份持有）。
+    add_versions("0.4.17", "2a44a3749d4cbca04a6221c37b78a56d4620d254") -- v0.4.17 发版（tag 同 commit）  2026-10-20
+    -- 0.4.18 = MethodEditor（从零建方法门面，PR #9）+ MethodParameters 接收者行放行（PR #11）。
+    add_versions("0.4.18", "ada334a12ec875ca9769bd5d4cb1f7e8494d2ebd") -- PR #11 合入 main 头  2026-10-26
 
     -- libca modules 对齐消费项目（mjbase/mjt）LUIOX_LIBCA_MODULES 家族统一
     -- 超集：包定义 add_deps 不吃消费方 requireconfs（实测），更小模块集会让
