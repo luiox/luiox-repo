@@ -32,6 +32,9 @@ package("libjhasm")
     -- 名字互赋）+ anewarray 落码改组件口径（JVMS 6.5，javac 同形；打印侧
     -- 按 CP 原样，两种既有形态均可往返）。
     add_versions("0.3.1", "2c07b097b1a098d5036961910db199a1c8535b55") -- strict 复核/anewarray 合入 main 头  2026-10-27
+    -- 0.3.2 = ARETURN 数组形态按签名精确匹配（strict 契约语义，协变捷径
+    -- 三路诊断齐发；接 0.3.1 的复核三面补全）。
+    add_versions("0.3.2", "b417276e783cd7bdb7ce3a142a91bf64c306b84d") -- areturn 收紧合入 main 头  2026-10-27
 
     -- 后端依赖按版本分支（uikit 同款 on_load 动态 deps；包定义静态 add_deps
     -- 不吃消费方 requireconfs（实测），故 libca 静态、后端分支动态）。
