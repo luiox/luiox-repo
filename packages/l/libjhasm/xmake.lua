@@ -28,6 +28,10 @@ package("libjhasm")
     -- JvmCompilerOptions 改 majorVersion/minorVersion u16 直载，JvmCompileResult
     -- 只带 bytes 不带旧栈模型视图）。
     add_versions("0.3.0", "d1ae5eaab74d0b68a22970562fa21402624d52a0") -- libjbc 后端合入 main 头  2026-10-26
+    -- 0.3.1 = strict 复核三面补全（字段操作描述符直读、虚分发接收者/ARETURN
+    -- 名字互赋）+ anewarray 落码改组件口径（JVMS 6.5，javac 同形；打印侧
+    -- 按 CP 原样，两种既有形态均可往返）。
+    add_versions("0.3.1", "2c07b09c5093ba7d64c2fca11fae554986c4a4d5") -- strict 复核/anewarray 合入 main 头  2026-10-27
 
     -- 后端依赖按版本分支（uikit 同款 on_load 动态 deps；包定义静态 add_deps
     -- 不吃消费方 requireconfs（实测），故 libca 静态、后端分支动态）。
