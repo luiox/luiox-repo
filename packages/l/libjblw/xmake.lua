@@ -1,5 +1,9 @@
 -- libjblw 包定义（本仓只存定义，源码来自 github.com/luiox/libjblw）
 --
+-- 弃用注记（RFC 0002 迁移线，2026-10）：libjhasm 0.3.x 装配后端换 libjbc，
+-- libjblw 零消费方退役（mjt/mjbase 均已出链，消费验证套件随迁删除）。新
+-- 消费方勿再引入；既有条目按可复现纪律保留不删。
+
 -- 机制同 libca：add_urls 指向 git 仓库 + add_versions 第二参数锁 commit。
 -- xmake 用系统 git 克隆并 checkout 到锁定 commit，随后在本包沙箱内
 -- 独立构建安装（不进消费工程的 target 图）。

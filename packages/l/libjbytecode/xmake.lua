@@ -1,5 +1,10 @@
 -- libjbytecode 包定义（本仓只存定义，源码来自 github.com/luiox/libjbytecode）
 --
+-- 弃用注记（RFC 0002 迁移线，2026-10）：libjbytecode 已被 libjbc 取代
+-- （mjt/mjbase 产品面完成迁移）。存量消费：mjbase relaxed_verifier（B8 8.7
+-- 移植 jhasm::analyze 后退役）。新消费方勿再引入；既有条目按可复现纪律
+-- 保留不删。
+
 -- 机制同 libca：add_urls 指向 git 仓库 + add_versions 第二参数锁 commit。
 -- xmake 用系统 git 克隆并 checkout 到锁定 commit，随后在本包沙箱内
 -- 独立构建安装（不进消费工程的 target 图）。
