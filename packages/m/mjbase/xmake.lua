@@ -15,8 +15,9 @@
 --     （jhasm/jblw 为源仓链接层传递边，包面不显式声明）。
 --
 -- 包级显式依赖（与源仓根 xmake.lua require 清单一字面对齐，消实例分裂）：
---   - libca 0.0.16 统一超集 modules；libjbc 0.4.15（ir/sir 消费面直连 DOM）
---   - libjstr / libjbytecode / libjzip / libgarena 0.0.3 + libjclassfile 0.0.2
+--   - libca 0.0.16 统一超集 modules；libjstr / libjzip / libgarena + libjclassfile
+--   - 版本门控（on_load）：0.0.3 起 libjbc 0.4.23 + libjstd/libjhasm（libjbytecode
+--     随 mjbase main 旧栈出清剜除）；0.0.2 及以前 libjbc 0.4.15 + libjbytecode
 --   - libarchive 3.8.8（openssl3=false）：model 的资源解包后端，安装期在包
 --     沙箱内经源仓 mjbase-repo 本地覆盖仓自足构建；消费方若自身亦依赖
 --     libarchive 需同配置对齐。
@@ -36,20 +37,31 @@ package("mjbase")
     -- 第 5 批孤儿测试（Windows 本机预存 4 例 storeLock* 红不计入其它平台）。
     add_versions("0.0.1", "31e6e7f304a524e7a2e0e41e0e474833905e96d0") -- 首发基线 + 孤儿测试面救回 + 导出捕获修正 2026-10-19
     add_versions("0.0.2", "f87aa3e0bffdd62996a59bc7cdddfeb69a6bd0ae") -- i18n 生成头回源（导出面补齐生成件，on_test 加 mjbase/i18n.hpp 直验）2026-10-19
+    add_versions("0.0.3", "b3dc748f0efa6199f409c82018d0e850e758bf9e") -- workspace 退役 + hierarchy/asm_analyzer 帧查询面（FrameQuery）+ spi 重组（common_super_resolver/frame_rewire 归 spi）；依赖变阵：libjbytecode 剜除、libjbc 0.4.15→0.4.23、新增 libjstd/libjhasm 2026-10-29
 
     -- libca modules 对齐消费项目（morpher/mjbase）统一超集：包定义 add_deps
     -- 不吃消费方 requireconfs（实测），更小模块集会让消费图多出一个 libca
     -- 实例（链接闭包多条 -libpath）。
     add_deps("libca", {configs = {modules = "core,crypto,str,fs,env,io,json,net,http,process,opt,thread,log,zip,resources,i18n,test"}})
     add_deps("zlib")
-    add_deps("libjbc 0.4.15")
     add_deps("libjstr")
     add_deps("libgarena")
     add_deps("libjzip")
-    add_deps("libjbytecode")
     add_deps("libjclassfile")
 
     on_load(function (package)
+        -- 依赖随版本变阵（0.0.3 起 mjbase main 剜除旧栈 libjbytecode、
+        -- libjbc 升 0.4.23、jasm 文本面底座 libjstd/libjhasm 进包级显式依赖，
+        -- 与源仓根 require 清单字面对齐消实例分裂）：既有条目只追加不修改，
+        -- 旧版本保持原依赖集可继续安装。
+        if package:version():ge("0.0.3") then
+            package:add("deps", "libjbc 0.4.23")
+            package:add("deps", "libjstd 0.0.1")
+            package:add("deps", "libjhasm 0.3.2")
+        else
+            package:add("deps", "libjbc 0.4.15")
+            package:add("deps", "libjbytecode")
+        end
         package:add("links", "mjbase")
         if package:is_plat("windows") then
             package:add("cxxflags", "/std:c++17")
