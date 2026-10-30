@@ -36,6 +36,11 @@ package("libgarena")
     -- 对齐仓库实际边界；CI 新增 Linux debug 作业并对库源启用 ASan 插桩。
     -- 无接口签名变更（行为按契约收紧）。
     add_versions("0.0.4", "9df0bfcab9e39b8441594cb49ad695b40b8c09ee") -- 契约修正 + CI/ASan 2026-10-21
+    -- 0.0.5 = 审查修缮：多 chunk reset 游标回首块（此前只从末块恢复，前面块
+    -- 跨周期搁浅、reset 密集负载 chunk 数无界增长）；Arena::create 构造抛出
+    -- 回退 bump（与 createArray 对齐）；growChunk 对齐放大前先判溢出、
+    -- alloc(0) 不放行非法对齐（溢出诊断口径统一）。无接口变更。
+    add_versions("0.0.5", "12807cd870a2f3d3a8a704f6c599787011c854ac") -- 多 chunk reset 修复 + 溢出诊断统一 2026-10-30
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略则消费方分别在编译期
     -- （libca 头）或链接期（libca_core 符号）炸 C1083/LNK2019。
