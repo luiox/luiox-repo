@@ -16,11 +16,14 @@
 --
 -- 包级显式依赖（与源仓根 xmake.lua require 清单一字面对齐，消实例分裂）：
 --   - libca 0.0.16 统一超集 modules；libjstr / libjzip / libgarena + libjclassfile
---   - 版本门控（on_load）：0.0.3 起 libjbc 0.4.23 + libjstd/libjhasm（libjbytecode
---     随 mjbase main 旧栈出清剜除）；0.0.2 及以前 libjbc 0.4.15 + libjbytecode
---   - libarchive 3.8.8（openssl3=false）：model 的资源解包后端，安装期在包
---     沙箱内经源仓 mjbase-repo 本地覆盖仓自足构建；消费方若自身亦依赖
---     libarchive 需同配置对齐。
+--   - 版本门控（on_load）：0.0.5 起 libjbc >=0.4.22 裸下界对齐源仓实钉
+--     （0.4.23 系上游仓库清理批无功能差异，libjhasm 0.3.3 沙箱内联词条只到
+--     0.4.22）+ libjstd/libjhasm；0.0.3–0.0.4 libjbc 0.4.23 + libjstd/libjhasm
+--     （libjbytecode 随 mjbase main 旧栈出清剜除）；0.0.2 及以前 libjbc
+--     0.4.15 + libjbytecode
+--   - libarchive 3.8.8（openssl3=false）仅 0.0.4 及以前：model 资源解包
+--     后端，安装期在包沙箱内经源仓 mjbase-repo 本地覆盖仓自足构建；0.0.5
+--     起解包面随 PR #112 下沉消费方，包面不再携带。
 --
 -- 包级验证以首个消费方（morpher mjt-dump 换轨批次）实际 add_requires 为准。
 
@@ -39,6 +42,7 @@ package("mjbase")
     add_versions("0.0.2", "f87aa3e0bffdd62996a59bc7cdddfeb69a6bd0ae") -- i18n 生成头回源（导出面补齐生成件，on_test 加 mjbase/i18n.hpp 直验）2026-10-19
     add_versions("0.0.3", "b3dc748f0efa6199f409c82018d0e850e758bf9e") -- workspace 退役 + hierarchy/asm_analyzer 帧查询面（FrameQuery）+ spi 重组（common_super_resolver/frame_rewire 归 spi）；依赖变阵：libjbytecode 剜除、libjbc 0.4.15→0.4.23、新增 libjstd/libjhasm 2026-10-29
     add_versions("0.0.4", "4d7dcc6d0d9d8046596e9a9f9f5a1311953517c3") -- jasm 孤立代理反汇编回归 + libjhasm 0.3.3 接线（混淆语料 CESU-8 孤立代理不再一票否决）2026-10-29
+    add_versions("0.0.5", "9b34b34cc9cba50b2a9e810d1b1387badc8a9d9b") -- libarchive 死面摘除：resource_io 解包面随需求下沉消费方，包面依赖同步退场 + libjbc 下界对齐实钉 0.4.22（main，PR #112）2026-10-30
 
     -- libca modules 对齐消费项目（morpher/mjbase）统一超集：包定义 add_deps
     -- 不吃消费方 requireconfs（实测），更小模块集会让消费图多出一个 libca
@@ -55,7 +59,14 @@ package("mjbase")
         -- libjbc 升 0.4.23、jasm 文本面底座 libjstd/libjhasm 进包级显式依赖，
         -- 与源仓根 require 清单字面对齐消实例分裂）：既有条目只追加不修改，
         -- 旧版本保持原依赖集可继续安装。
-        if package:version():ge("0.0.4") then
+        if package:version():ge("0.0.5") then
+            package:add("deps", "libjbc >=0.4.22") -- 裸下界对齐源仓实钉 0.4.22（0.4.23 系上游清理批无功能差异，libjhasm 0.3.3 沙箱内联词条只到 0.4.22）
+            package:add("deps", "libjstd 0.0.1")
+            package:add("deps", "libjhasm >=0.3.3") -- 裸下界：孤立代理转义修复起（0.3.3）
+            -- libarchive 随 PR #112 退场：resource_io 解包面下沉消费方，
+            -- 0.0.5 起新代码无 archive_* 符号，包面不再携带（0.0.4 分支
+            -- 保留旧修复不动，旧版本保持原依赖集可继续安装）。
+        elseif package:version():ge("0.0.4") then
             package:add("deps", "libjbc >=0.4.23")
             package:add("deps", "libjstd 0.0.1")
             package:add("deps", "libjhasm >=0.3.3") -- 裸下界：孤立代理转义修复起（0.3.3）
@@ -74,9 +85,14 @@ package("mjbase")
         package:add("links", "mjbase")
         if package:is_plat("windows") then
             package:add("cxxflags", "/std:c++17")
-            -- bcrypt：libca crypto NT 系；xmllite：包内 libarchive 静态成员的
-            -- xar 读符号（final link 需要，public 语义同源仓 target）。
-            package:add("syslinks", "bcrypt", "xmllite")
+            -- bcrypt：libca crypto NT 系。
+            package:add("syslinks", "bcrypt")
+            -- xmllite：包内 libarchive 静态成员的 xar 读符号（0.0.4 及以前的
+            -- final link 需要，public 语义同源仓 target）；0.0.5 起源仓随
+            -- libarchive 一并摘 xmllite syslinks，包面对齐不再携带。
+            if package:version():lt("0.0.5") then
+                package:add("syslinks", "xmllite")
+            end
         else
             package:add("cxxflags", "-std=c++17")
         end
