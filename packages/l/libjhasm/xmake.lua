@@ -35,6 +35,11 @@ package("libjhasm")
     -- 0.3.2 = ARETURN 数组形态按签名精确匹配（strict 契约语义，协变捷径
     -- 三路诊断齐发；接 0.3.1 的复核三面补全）。
     add_versions("0.3.2", "b417276e783cd7bdb7ce3a142a91bf64c306b84d") -- areturn 收紧合入 main 头  2026-10-27
+    -- 0.3.3 = escape 转义孤立代理单元（无高低配对的 D800-DFFF 落 \uXXXX 文本，
+    -- 合法代理对呈现不变）：CP Utf8 携带 CESU-8 孤立代理（混淆语料加密常量
+    -- 常态）时，文本面不再被 Utf16String::to_utf8_string 重编码一票否决；
+    -- 装配侧 unescape + modifiedUtf8 逐位还原，往返字节可逆。
+    add_versions("0.3.3", "e4fb91fc16d82ef28998b88951b9beb6378502ee") -- 孤立代理转义合入 main 头  2026-10-29
 
     -- 后端依赖按版本分支（uikit 同款 on_load 动态 deps；包定义静态 add_deps
     -- 不吃消费方 requireconfs（实测），故 libca 静态、后端分支动态）。
