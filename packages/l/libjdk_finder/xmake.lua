@@ -24,6 +24,12 @@ package("libjdk_finder")
     add_versions("0.0.1", "ee1b9c19ef6c146121020e60a0a1554fa46b1536") -- 迁移基线 2026-10-12
     add_versions("0.0.2", "cc7712ec396a3334ce7dedfe9b2f7115e58f87b2") -- findVcvarsAll 枚举兜底（VS 2026）2026-10-14
     add_versions("0.1.0", "30c4012890123fb8685c7823b61f4c0a7a3e99bb") -- API snake_case（破坏性）+ 默认安装位置扫描与 java 版本/发行商查询 2026-10-17
+    -- 0.1.1 = 默认安装位置扫描修复：一级目录无论自身是否命中都下探二级
+    -- （Temurin/Oracle/Zulu 等厂商嵌套布局此前漏扫）；vcvarsall 经
+    -- VCToolsInstallDir 定位时按 UTF-8 边界转码（CJK 安装路径不再乱码）；
+    -- MSVC 探测收敛 probe_msvc（cl+INCLUDE 就绪判定与 vcvarsall 补足）。
+    -- 无接口变更。
+    add_versions("0.1.1", "73609bbd4c0c4f08de1d22ffcdcf6351200eebc1") -- 厂商嵌套布局漏扫修复 + vcvarsall UTF-8 转码 2026-10-30
 
     -- libca modules：对齐消费项目（mjbase/mjt）root xmake.lua 的
     -- LUIOX_LIBCA_MODULES 家族统一超集。包定义 add_deps 不吃消费方的

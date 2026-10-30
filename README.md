@@ -44,6 +44,7 @@ GIT_CONFIG_KEY_1=https.proxy GIT_CONFIG_VALUE_1= xmake ...
 | [libca](packages/l/libca/xmake.lua) | 0.0.1 – 0.0.16 | [luiox/libca](https://github.com/luiox/libca) |
 | [libjbc](packages/l/libjbc/xmake.lua) | 0.1.0 – 0.4.16 | [luiox/libjbc](https://github.com/luiox/libjbc) |
 | [libgarena](packages/l/libgarena/xmake.lua) | 0.0.1 – 0.0.5 | [luiox/libgarena](https://github.com/luiox/libgarena) |
+| [libjdk_finder](packages/l/libjdk_finder/xmake.lua) | 0.0.1 – 0.1.1 | [luiox/libjdk_finder](https://github.com/luiox/libjdk_finder) |
 | [libjstr](packages/l/libjstr/xmake.lua) | 0.0.1 – 0.0.3 | [luiox/libjstr](https://github.com/luiox/libjstr) |
 | [libjzip](packages/l/libjzip/xmake.lua) | 0.0.1 – 0.0.3 | [luiox/libjzip](https://github.com/luiox/libjzip) |
 | [libjbytecode](packages/l/libjbytecode/xmake.lua) | 0.0.1 – 0.0.3 | [luiox/libjbytecode](https://github.com/luiox/libjbytecode) |
