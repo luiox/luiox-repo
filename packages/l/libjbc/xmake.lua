@@ -39,6 +39,8 @@ package("libjbc")
     add_versions("0.4.18", "ada334a12ec875ca9769bd5d4cb1f7e8494d2ebd") -- PR #11 合入 main 头  2026-10-26
     -- 0.4.23 = 仓库瘦身定版（PR #20）：docs/design.md 重写为现状真源、注释清批次号与死指针、class_build_attrs_test 收编（此前 xmake.lua 引用未入库文件，新克隆编不出 unittest）。
     add_versions("0.4.23", "4228cf3650b2409a106511a3cf8ca7275ed5ed04") -- PR #21 合入 main 头  2026-10-29
+    -- 0.4.24 = 依赖统一（PR #22）：libca 0.0.13 → 0.0.16（modules 超集不变；单测 505 例 A/B 与 0.0.13 基线逐例一致）。
+    add_versions("0.4.24", "f14fc9ab0ac675ba27552111ee07f6c9c9f1d763") -- PR #22 合入 main 头  2026-10-30
 
     -- libca modules 对齐消费项目（mjbase/mjt）LUIOX_LIBCA_MODULES 家族统一
     -- 超集：包定义 add_deps 不吃消费方 requireconfs（实测），更小模块集会让
