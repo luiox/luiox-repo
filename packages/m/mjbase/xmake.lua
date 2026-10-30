@@ -38,6 +38,7 @@ package("mjbase")
     add_versions("0.0.1", "31e6e7f304a524e7a2e0e41e0e474833905e96d0") -- 首发基线 + 孤儿测试面救回 + 导出捕获修正 2026-10-19
     add_versions("0.0.2", "f87aa3e0bffdd62996a59bc7cdddfeb69a6bd0ae") -- i18n 生成头回源（导出面补齐生成件，on_test 加 mjbase/i18n.hpp 直验）2026-10-19
     add_versions("0.0.3", "b3dc748f0efa6199f409c82018d0e850e758bf9e") -- workspace 退役 + hierarchy/asm_analyzer 帧查询面（FrameQuery）+ spi 重组（common_super_resolver/frame_rewire 归 spi）；依赖变阵：libjbytecode 剜除、libjbc 0.4.15→0.4.23、新增 libjstd/libjhasm 2026-10-29
+    add_versions("0.0.4", "4d7dcc6d0d9d8046596e9a9f9f5a1311953517c3") -- jasm 孤立代理反汇编回归 + libjhasm 0.3.3 接线（混淆语料 CESU-8 孤立代理不再一票否决）2026-10-29
 
     -- libca modules 对齐消费项目（morpher/mjbase）统一超集：包定义 add_deps
     -- 不吃消费方 requireconfs（实测），更小模块集会让消费图多出一个 libca
@@ -54,7 +55,11 @@ package("mjbase")
         -- libjbc 升 0.4.23、jasm 文本面底座 libjstd/libjhasm 进包级显式依赖，
         -- 与源仓根 require 清单字面对齐消实例分裂）：既有条目只追加不修改，
         -- 旧版本保持原依赖集可继续安装。
-        if package:version():ge("0.0.3") then
+        if package:version():ge("0.0.4") then
+            package:add("deps", "libjbc >=0.4.23")
+            package:add("deps", "libjstd 0.0.1")
+            package:add("deps", "libjhasm >=0.3.3") -- 裸下界：孤立代理转义修复起（0.3.3）
+        elseif package:version():ge("0.0.3") then
             package:add("deps", "libjbc >=0.4.23")  -- 裸下界：家族 libjbc 升版不被 mjbase 0.0.3 钉死（0.4.24 libca 0.0.16 统一实测兼容）
             package:add("deps", "libjstd 0.0.1")
             package:add("deps", "libjhasm 0.3.2")
