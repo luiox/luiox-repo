@@ -48,6 +48,10 @@ package("libjbytecode")
     add_deps("libca", {configs = {modules = "core,crypto,str,fs,env,io,json,net,http,process,opt,thread,log,zip,resources,i18n,test"}})
     add_deps("zlib")
     add_deps("libjstr")
+    -- 裸名嵌套解析默认取最新版：消费方若在顶层钉定 libgarena 版本，必须镜像
+    -- add_requireconfs("libjbytecode.libgarena", {version=..., override=true})
+    -- 同步翻转，否则包图内双实例 ODR（公开头按值内嵌 Arena）。0.0.5 起
+    -- sizeof 80→88 静默 ABI 变更背景见 libgarena 包定义 ABI 注记。
     add_deps("libgarena")
 
     on_load(function (package)

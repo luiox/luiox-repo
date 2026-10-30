@@ -14,6 +14,16 @@
 --     引用 libca_core 符号。libca modules 取 luiox 家族统一超集
 --     core,str,log,crypto,zip（同一消费图内各包配置必须一致，否则报冲突）；
 --     zip 模块链接需要 zlib，随包传递声明。
+--
+-- ABI 注记：0.0.5 起 Arena 布局较 0.0.4 +8 字节（新增私有成员 bump_chunk_，
+-- x64 下 sizeof 80→88），无接口签名变更，属静默 ABI 破坏。按值内嵌 Arena 的
+-- 消费方（libjbytecode 族公开头 FieldNode/MethodNode/ClassNode/ClassReader）
+-- 必须整图同版：包图出现 0.0.4/0.0.5 双实例时同一二进制两套成员表交错，整套
+-- 件 SEH 0xC0000005、崩溃点在消费方成员写（寄存器碎片 0xC0C0C0C0C0C0C0C0），
+-- 极易误判为 reset 毒化/悬垂（实测案例 mj2x 全量 279 例）。升级时顶层钉定与
+-- 嵌套裸名解析的 override 需同步翻转（镜像写法见 libjbytecode 包定义
+-- add_deps 注记）。另：0.0.5 的 reset 游标回首块修复对无 reset 消费方零差异
+-- （本次实测归属结论）。
 
 package("libgarena")
     set_homepage("https://github.com/luiox/libgarena")
