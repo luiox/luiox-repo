@@ -55,7 +55,7 @@ package("mjbase")
         -- 与源仓根 require 清单字面对齐消实例分裂）：既有条目只追加不修改，
         -- 旧版本保持原依赖集可继续安装。
         if package:version():ge("0.0.3") then
-            package:add("deps", "libjbc 0.4.23")
+            package:add("deps", "libjbc >=0.4.23")  -- 裸下界：家族 libjbc 升版不被 mjbase 0.0.3 钉死（0.4.24 libca 0.0.16 统一实测兼容）
             package:add("deps", "libjstd 0.0.1")
             package:add("deps", "libjhasm 0.3.2")
         else
