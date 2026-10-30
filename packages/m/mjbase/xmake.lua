@@ -59,6 +59,10 @@ package("mjbase")
             package:add("deps", "libjbc >=0.4.23")
             package:add("deps", "libjstd 0.0.1")
             package:add("deps", "libjhasm >=0.3.3") -- 裸下界：孤立代理转义修复起（0.3.3）
+            -- libarchive：model resource_io 的解包后端（源仓 target add_packages
+            -- 私有挂载——包面漏声明让导出的 mjbase.lib 带未解析 archive_* 符号，
+            -- 首个包消费方 grunt_cli 链接期实证后补）。
+            package:add("deps", "libarchive 3.8.8", {configs = {openssl3 = false}})
         elseif package:version():ge("0.0.3") then
             package:add("deps", "libjbc >=0.4.23")  -- 裸下界：家族 libjbc 升版不被 mjbase 0.0.3 钉死（0.4.24 libca 0.0.16 统一实测兼容）
             package:add("deps", "libjstd 0.0.1")
