@@ -84,10 +84,13 @@ package("mjbase")
     end)
 
     on_test(function (package)
-        -- 编译面自检：跨模块伞头 + 深目录头沿安装 include 根解析成功；
-        -- i18n.hpp 直验生成头回源随包出仓（首版 0.0.1 漏生成件，
-        -- 消费方 mjt-deobf sir_verifier 实证 C1083 后补）。
+        -- 编译面自检：跨模块伞头 + 深目录头沿安装 include 根解析成功。
+        -- i18n.hpp 直验仅 <0.0.3（i18n 面随 cli 退役整体剜除，main 已无此头）。
         assert(package:has_cxxincludes("mjbase/keys.hpp", {configs = {languages = "cxx17"}}))
         assert(package:has_cxxincludes("mjbase/hierarchy/class_hierarchy.hpp", {configs = {languages = "cxx17"}}))
-        assert(package:has_cxxincludes("mjbase/i18n.hpp", {configs = {languages = "cxx17"}}))
+        if package:version():lt("0.0.3") then
+            assert(package:has_cxxincludes("mjbase/i18n.hpp", {configs = {languages = "cxx17"}}))
+        else
+            assert(package:has_cxxincludes("mjbase/util.hpp", {configs = {languages = "cxx17"}}))
+        end
     end)
