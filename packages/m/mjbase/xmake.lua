@@ -46,6 +46,7 @@ package("mjbase")
     add_versions("0.0.5", "9b34b34cc9cba50b2a9e810d1b1387badc8a9d9b") -- libarchive 死面摘除：resource_io 解包面随需求下沉消费方，包面依赖同步退场 + libjbc 下界对齐实钉 0.4.22（main，PR #112）2026-10-30
     add_versions("0.0.6", "1b80687921c09d7d82121665616832f97cdc959b") -- shadow 表 rename 后 rebind（PR #113）+ libgarena 0.0.3→0.0.5 / libjdk_finder 0.1.0→0.1.1（PR #114；main tip 定版，包源自带 requires，词条面无新增）2026-10-31
     add_versions("0.0.7", "ecbe15054c838eaaf88d35cdf7a20cb023c9a145") -- analysis-db 特性线合入（PR #117）：project/analysis_db 分析数据库 + 四 pass（局部变量表规范化/行号清理/入口槽置换还原注册面）+ renamer/shadow_alias_store；依赖变阵：新增 sqlite3 3.53.0（analysis_db 存储引擎）2026-11-01
+    add_versions("0.0.8", "540f156d4e60c98626ecddc878034ac4e5b47d1b") -- analysis-db schema v3 条目身份层（PR #122）：inputs/entries 表（entry_id 单调只增不删、(input_id,path,sha256) 锚匹配、墓碑保留与原地复活、entries_live 部分唯一索引）+ classes.entry_id 链接 + ingest/ensureInput 批量登记面 + 旧库 fail-loud 版本门；词条面无新增依赖 2026-11-01
 
     -- libca modules 对齐消费项目（morpher/mjbase）统一超集：包定义 add_deps
     -- 不吃消费方 requireconfs（实测），更小模块集会让消费图多出一个 libca
