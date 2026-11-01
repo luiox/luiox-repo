@@ -18,7 +18,8 @@
 --   - libca 0.0.16 统一超集 modules；libjstr / libjzip / libgarena + libjclassfile
 --   - 版本门控（on_load）：0.0.5 起 libjbc >=0.4.22 裸下界对齐源仓实钉
 --     （0.4.23 系上游仓库清理批无功能差异，libjhasm 0.3.3 沙箱内联词条只到
---     0.4.22）+ libjstd/libjhasm；0.0.3–0.0.4 libjbc 0.4.23 + libjstd/libjhasm
+--     0.4.22）+ libjstd/libjhasm；0.0.7 起新增 sqlite3 3.53.0（analysis_db
+--     存储引擎，PR #117）；0.0.3–0.0.4 libjbc 0.4.23 + libjstd/libjhasm
 --     （libjbytecode 随 mjbase main 旧栈出清剜除）；0.0.2 及以前 libjbc
 --     0.4.15 + libjbytecode
 --   - libarchive 3.8.8（openssl3=false）仅 0.0.4 及以前：model 资源解包
@@ -44,6 +45,7 @@ package("mjbase")
     add_versions("0.0.4", "4d7dcc6d0d9d8046596e9a9f9f5a1311953517c3") -- jasm 孤立代理反汇编回归 + libjhasm 0.3.3 接线（混淆语料 CESU-8 孤立代理不再一票否决）2026-10-29
     add_versions("0.0.5", "9b34b34cc9cba50b2a9e810d1b1387badc8a9d9b") -- libarchive 死面摘除：resource_io 解包面随需求下沉消费方，包面依赖同步退场 + libjbc 下界对齐实钉 0.4.22（main，PR #112）2026-10-30
     add_versions("0.0.6", "1b80687921c09d7d82121665616832f97cdc959b") -- shadow 表 rename 后 rebind（PR #113）+ libgarena 0.0.3→0.0.5 / libjdk_finder 0.1.0→0.1.1（PR #114；main tip 定版，包源自带 requires，词条面无新增）2026-10-31
+    add_versions("0.0.7", "ecbe15054c838eaaf88d35cdf7a20cb023c9a145") -- analysis-db 特性线合入（PR #117）：project/analysis_db 分析数据库 + 四 pass（局部变量表规范化/行号清理/入口槽置换还原注册面）+ renamer/shadow_alias_store；依赖变阵：新增 sqlite3 3.53.0（analysis_db 存储引擎）2026-11-01
 
     -- libca modules 对齐消费项目（morpher/mjbase）统一超集：包定义 add_deps
     -- 不吃消费方 requireconfs（实测），更小模块集会让消费图多出一个 libca
@@ -60,7 +62,14 @@ package("mjbase")
         -- libjbc 升 0.4.23、jasm 文本面底座 libjstd/libjhasm 进包级显式依赖，
         -- 与源仓根 require 清单字面对齐消实例分裂）：既有条目只追加不修改，
         -- 旧版本保持原依赖集可继续安装。
-        if package:version():ge("0.0.5") then
+        if package:version():ge("0.0.7") then
+            package:add("deps", "libjbc >=0.4.22") -- 裸下界对齐源仓实钉 0.4.22（0.4.23 系上游清理批无功能差异，libjhasm 0.3.3 沙箱内联词条只到 0.4.22）
+            package:add("deps", "libjstd 0.0.1")
+            package:add("deps", "libjhasm >=0.3.3") -- 裸下界：孤立代理转义修复起（0.3.3）
+            -- sqlite3：analysis_db（project 模块，PR #117）的存储引擎，配置
+            -- 与源仓根 require 一致（静态链接）。
+            package:add("deps", "sqlite3 3.53.0", {configs = {shared = false}})
+        elseif package:version():ge("0.0.5") then
             package:add("deps", "libjbc >=0.4.22") -- 裸下界对齐源仓实钉 0.4.22（0.4.23 系上游清理批无功能差异，libjhasm 0.3.3 沙箱内联词条只到 0.4.22）
             package:add("deps", "libjstd 0.0.1")
             package:add("deps", "libjhasm >=0.3.3") -- 裸下界：孤立代理转义修复起（0.3.3）
