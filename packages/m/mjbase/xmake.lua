@@ -53,6 +53,7 @@ package("mjbase")
     add_versions("0.0.12", "d57e9410fbcbca614588555fc033cd2cfbc2b6ba") -- entry_shape 补 Overlong/WhitespaceEdge 两 facet（PR #136，#121 P1）：空格名混淆 jar 实测（全空格路径 21845B）暴露 B1 最小口径漏判空白与超长形态，补单段 >255B 或全路径 >4096B 的 Overlong 与段首尾空格的 WhitespaceEdge，优先序 TrailingSlash 之后，历史库重导入 regular 翻转属预期；词条面无新增依赖 2026-11-02
     add_versions("0.0.13", "1e193c2addaae9cae16af201987b640cce34a824") -- 按源成员引用切片替换（PR #139，#121 G1：replaceReferencesFromMember 单事务按 source_member_id 删+插，切片身份先落定、行内 source 一致性 Invalid 门，空输入清切片）+ 库前缀分类核心（PR #140，#132 L1：library_origin 官方 10 + 第三方 16 段边界前缀表，'/ '锚防误吸，规则版本常量）+ 引用与层次闭包分页变体（PR #141，#121 G4：7 查询 *Paged 行偏移窗口，窗口语义契约化，闭包成本说明）+ censusClasses origin 派生列（PR #142，#132 L1 接线：行级来源切面，零 schema 变更）；词条面无新增依赖 2026-11-03
     add_versions("0.0.14", "70386d5faf83e5dd38ecb39ca439ca319fac1ae7") -- refs 目标侧 id 化（PR #149，#121 P5 / #138 schema v5：refs 加 target_class_id/target_member_id 可空外键，applyReferenceBatch 双 target memo 整目标二元化落 id/文本、referencesTo* 双分支 UNION ALL 按 ref_id 互斥不重不漏、kReferenceSelectSql 双 LEFT JOIN + COALESCE、source 侧两索引沿用、目标文本字节 API 读写抗非法 UTF-8 名、版本门 v4 拒绝可诊断；混淆语料 PoC 实测 373.8MB→8.74MB，切片查询 6×、类目标页扫 155×）；词条面无新增依赖 2026-11-04
+    add_versions("0.0.15", "59ffe5d882126735d6ab36b94a1b6b994a6e099a") -- member 普查投影面（PR #150，#148 设计批 1：DbMemberCensusRow 一行一成员 + censusMembers(inputId) 可见域与墓碑语义同 censusClasses、复合键 BINARY 行序定死投影层、native 投影派生、origin 继承类级不重复分类；零 schema 变更）；词条面无新增依赖 2026-11-04
 
     -- libca modules 对齐消费项目（morpher/mjbase）统一超集：包定义 add_deps
     -- 不吃消费方 requireconfs（实测），更小模块集会让消费图多出一个 libca
