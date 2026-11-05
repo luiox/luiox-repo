@@ -57,6 +57,7 @@ package("mjbase")
     add_versions("0.0.16", "7d5a41a57e312053bd64002405d1fcd2b45dc367") -- producer 注册表批 1-3（PR #151，#143 schema v6：producers/batches/batch_scopes 三表 + registerProducer/openBatch/closeBatch + renames 行级 producer_id + 事实写入口 batchId 首参必填参数化（0=无批落 NULL 归属）+ 归属解析双探针取大 + producerStats；旧 v5 库 fail-loud）；词条面无新增依赖 2026-11-04
     add_versions("0.0.17", "33b86af9c09469d22f3543181699fad741e65b6d") -- method_versions 方法版本指纹表（PR #154，#132 db 接线：schema v8，32 字节 BLOB + fp_version 算法版本列 + is_current 部分唯一索引当前指针，recordMethodVersion 幂等/批量原子/currentMethodFingerprint/listMethodVersions，旧 v7 库 fail-loud）；词条面无新增依赖 2026-11-04
     add_versions("0.0.18", "7999684fe7ef6343955f4d37a0784e29f7e9df94") -- jar 导入同名重复条目改末现保留对齐 JVM 类加载口径（PR #160，Dup 名以物理后现为准）+ asm/remapper 注解递归畸形输入边界守卫（#158）；词条面无新增依赖 2026-11-04
+    add_versions("0.0.19", "07ef1a0d0db18b9b4cef414cb3e168399e5bd255") -- 全程序方法可达闭包入分析库（PR #162，#159：schema v8→v9 fail-loud，closure_batches/closure_members 两新表 + batches.kind 新词 closure_write，闭包计算面 project/reachability_closure——refs 主图整数对边 + 保守族展开 + clinit 首触沿 super 链 + 种子三档，失效 = 输入图指纹（inputs 投影 + 四表变更敏感聚合）+ seed_mask 双匹配整体重算，查询面 listClosureBatches/closureMembersPaged/isClosureMember/freshClosureBatch/closureGraphEdges；设计稿与 PoC 数字 PR #161）；词条面无新增依赖 2026-11-05
 
     -- libca modules 对齐消费项目（morpher/mjbase）统一超集：包定义 add_deps
     -- 不吃消费方 requireconfs（实测），更小模块集会让消费图多出一个 libca
