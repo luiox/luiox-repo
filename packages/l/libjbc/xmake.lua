@@ -41,6 +41,9 @@ package("libjbc")
     add_versions("0.4.23", "4228cf3650b2409a106511a3cf8ca7275ed5ed04") -- PR #21 合入 main 头  2026-10-29
     -- 0.4.24 = 依赖统一（PR #22）：libca 0.0.13 → 0.0.16（modules 超集不变；单测 505 例 A/B 与 0.0.13 基线逐例一致）。
     add_versions("0.4.24", "f14fc9ab0ac675ba27552111ee07f6c9c9f1d763") -- PR #22 合入 main 头  2026-10-30
+    -- 0.4.25 未收编：本地修复线定版（mjt 内联包消费：帧引擎汇合点栈深守卫 + CP 装载结果形状按描述符精确映射），未曾在 origin/main 头上发布。
+    -- 0.4.26 = 两线收敛合并头：上述本地修复线与 #24/#25（goto/jsr 导出期加宽 + CodeDom 尺寸评估器 + lower 64KB 闸门；RST 规格 + 引用门禁 + Doxygen 微观层）并线，版本跳号错开 0.4.24 的多义占号。合并后单测 514 例全绿（0 失败）。
+    add_versions("0.4.26", "be2ab8b16f60a2f663aaa261af3c94ea4bdd42d9") -- 两线收敛合并头  2026-11-07
 
     -- libca modules 对齐消费项目（mjbase/mjt）LUIOX_LIBCA_MODULES 家族统一
     -- 超集：包定义 add_deps 不吃消费方 requireconfs（实测），更小模块集会让
