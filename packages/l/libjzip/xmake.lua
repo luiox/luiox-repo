@@ -38,6 +38,14 @@ package("libjzip")
     -- defaultEntryOutputCap 限制解压输出。接口纯新增（decompressor.hpp 增
     -- defaultEntryOutputCap）。CI pull_request 触发放宽到 fix/**，治理文件对齐。
     add_versions("0.0.4", "cf7d2e2bb8bcd88aec1b8f31aaff0a8272a29cf0") -- ZIP32 边界 + 写入器修缮 2026-10-21
+    -- 0.0.5 = 零大小条目修复收尾：JvmLocalFileHeader::adoptLinkedCentralDirectoryValues
+    -- 对 CEN 权威大小 0 强制对齐空数据（0.0.4 的 ceiling 修复只覆盖邻接头恰好
+    -- 落在数据起点的形态，垃圾间隔与 bit3 零大小数据描述符仍漏，前向扫描塞进
+    -- fileData 的邻接结构字节按 CEN 权威清空）；ZipIO::decompressLocalFile 对
+    -- 无流字节 DEFLATED 条目回空（与 STORED 直通一致，不再拿空输入喂 zlib 换
+    -- Z_BUF_ERROR），非零长敌意流异常通道不变。反证用例 4 案（修复前全红）。
+    -- 接口零变化。
+    add_versions("0.0.5", "294f886569a9e2081dba061181c65359a841a00e") -- 零大小条目 adopt 空对齐 + 空负载 DEFLATED 回空 2026-11-07
 
     -- 公开头/实现的传递依赖（见头部链接说明）：省略任一条，消费方分别在
     -- 编译期（libca 头）或链接期（libca_zip/zlib 符号）炸 LNK2019/C1083。
