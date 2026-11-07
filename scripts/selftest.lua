@@ -166,9 +166,12 @@ function _run_package(argv, name, version, repodir)
 
             -- the package source resolves its own dependencies (luiox family
             -- packages via the local-repo registration below, xrepo packages
-            -- such as zlib/gtest via the builtin repositories)
-            os.execv(os.programfile(), {"repo", "--add", "local-repo", repodir})
+            -- such as zlib/gtest via the builtin repositories); the
+            -- registration is project-local in xmake, so it must run with the
+            -- clone as cwd (the scratch project's registration does not carry
+            -- over, and CI has no global luiox-repo to fall back on)
             os.cd(srcdir)
+            os.execv(os.programfile(), {"repo", "--add", "local-repo", repodir})
             local plat = argv.plat or os.subhost()
             local arch = argv.arch or os.subarch()
             local mode = argv.mode or "release"
