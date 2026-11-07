@@ -15,13 +15,18 @@
 --   * per-package extra configs: uikit's duilib layer is windows-only, so
 --     uikit is required with core_only=true on linux/macosx;
 --   * default fallback package when nothing changed: libca (xmake-repo uses
---     "tbox dev"; libca is the root dependency of every package here).
+--     "tbox dev"; libca is the root dependency of every package here);
+--   * self-test tier: after require/install, packages registered in
+--     scripts/selftest.lua get their own test targets built and run from a
+--     fresh shallow clone at the pinned commit (a change to selftest.lua
+--     itself validates all registered packages on the spot).
 
 -- imports
 import("core.base.option")
 import("core.platform.platform")
 import("core.package.package", {alias = "core_package"})
 import("packages", {alias = "get_packages"})
+import("selftest")
 
 -- the options (trimmed from xmake-repo; add toolchain/sdk options back as needed)
 local options =
@@ -330,6 +335,12 @@ function get_modified_packages()
             end
         end
     end
+    -- a change to the self-test registry/mechanism validates its registered
+    -- packages on the spot (mirrors test.lua's rule that CI script changes
+    -- are validated by the very first run)
+    if diff:find("scripts/selftest.lua", 1, true) then
+        table.join2(new_packages, selftest.registered_packages())
+    end
     return table.unique(new_packages)
 end
 
@@ -399,6 +410,10 @@ function main(...)
     -- test on_load (require --info), then on_check/on_install
     _load_packages(argv, packages)
     _require_packages(argv, packages)
+
+    -- self-test tier: build and run the own test targets of registered
+    -- packages from a fresh clone at the pinned commit (scripts/selftest.lua)
+    selftest(argv, packages, repodir)
 end
 
 return main
