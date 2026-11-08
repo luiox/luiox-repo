@@ -58,6 +58,7 @@ package("mjbase")
     add_versions("0.0.17", "33b86af9c09469d22f3543181699fad741e65b6d") -- method_versions 方法版本指纹表（PR #154，#132 db 接线：schema v8，32 字节 BLOB + fp_version 算法版本列 + is_current 部分唯一索引当前指针，recordMethodVersion 幂等/批量原子/currentMethodFingerprint/listMethodVersions，旧 v7 库 fail-loud）；词条面无新增依赖 2026-11-04
     add_versions("0.0.18", "7999684fe7ef6343955f4d37a0784e29f7e9df94") -- jar 导入同名重复条目改末现保留对齐 JVM 类加载口径（PR #160，Dup 名以物理后现为准）+ asm/remapper 注解递归畸形输入边界守卫（#158）；词条面无新增依赖 2026-11-04
     add_versions("0.0.19", "07ef1a0d0db18b9b4cef414cb3e168399e5bd255") -- 全程序方法可达闭包入分析库（PR #162，#159：schema v8→v9 fail-loud，closure_batches/closure_members 两新表 + batches.kind 新词 closure_write，闭包计算面 project/reachability_closure——refs 主图整数对边 + 保守族展开 + clinit 首触沿 super 链 + 种子三档，失效 = 输入图指纹（inputs 投影 + 四表变更敏感聚合）+ seed_mask 双匹配整体重算，查询面 listClosureBatches/closureMembersPaged/isClosureMember/freshClosureBatch/closureGraphEdges；设计稿与 PoC 数字 PR #161）；词条面无新增依赖 2026-11-05
+    add_versions("0.0.20", "7234306feb3ce57383bb74a07a1d763258a5c651") -- 真改名身份迁移（PR #198：AnalysisDb::migrateIdentities 单事务批量改写 classes.internal_name / members.name+descriptor（连带 super_name/interfaces 文本副本），class_id / member_id 与 renames 覆盖行零触碰——覆盖层按稳定 ID 键控，真改名后零补丁，undo 反向规格对称回滚；未命中跳过、撞名/批内重复 Invalid 整批回滚；shadow 落分析库的基座前提）+ jasm validate 语义级 flag 规则库（#193，16 条 JVMS/HotSpot 对齐规则 + JDK 对拍门）+ libjstr 0.0.4 / 文档树对齐（#196/#192/#197）；词条面无新增依赖 2026-11-08
 
     -- libca modules 对齐消费项目（morpher/mjbase）统一超集：包定义 add_deps
     -- 不吃消费方 requireconfs（实测），更小模块集会让消费图多出一个 libca
