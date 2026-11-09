@@ -44,6 +44,10 @@ package("libjbc")
     -- 0.4.25 未收编：本地修复线定版（mjt 内联包消费：帧引擎汇合点栈深守卫 + CP 装载结果形状按描述符精确映射），未曾在 origin/main 头上发布。
     -- 0.4.26 = 两线收敛合并头：上述本地修复线与 #24/#25（goto/jsr 导出期加宽 + CodeDom 尺寸评估器 + lower 64KB 闸门；RST 规格 + 引用门禁 + Doxygen 微观层）并线，版本跳号错开 0.4.24 的多义占号。合并后单测 514 例全绿（0 失败）。
     add_versions("0.4.26", "be2ab8b16f60a2f663aaa261af3c94ea4bdd42d9") -- 两线收敛合并头  2026-11-07
+    -- 0.4.27 = StrictDomain ldc 类常量装载建模修复：改推 java/lang/Class（原误建为常量命名的类类型本身，
+    -- 沿 astore 流进异常 handler 合并帧后重算 StackMapTable 与 JVM 验证器冲突，analysis-zkm 自产矩阵
+    -- 运行对比轴实测 VerifyError 抓出）；补 StrictFrameTest.LdcClassConstantLoadsClassObject 锁行为。
+    add_versions("0.4.27", "0c54fc2ccd7734bffb0a5d1188e9fafcf0f9eff3") -- fix 提交直上 main  2026-11-09
 
     -- libca modules 对齐消费项目（mjbase/mjt）LUIOX_LIBCA_MODULES 家族统一
     -- 超集：包定义 add_deps 不吃消费方 requireconfs（实测），更小模块集会让
