@@ -36,6 +36,12 @@ package("libjsim")
     -- 0.0.1 = jsim-jbc 官方桥扩展包定版基线（核心 4 头 + 扩展 5 头全量进包；
     -- test/demo 四个 binary target 为开发态目标不进包）。
     add_versions("0.0.1", "65ff62f156805b656c184e5312b5cb0230edb7b8") -- jsim-jbc 官方桥扩展包，demo/deobf 消费方桥退役；依赖面：libjbc >=0.4.24 仅挂 jbc 桥面（config 默认关），核心与 str/num/reflect/indy 零包依赖 2026-11-04
+    add_versions("0.0.2", "553264c2bfbe34458e1667e7feb664d0c3897ab6") -- 桥搬 indy 调用点与 athrow 异常表 + 引擎区间派发（PR #7），依赖面不变 2026-11-12
+    -- 0.0.2 = 桥面 indy/athrow 定版（PR #7）：jbc 桥搬 INVOKEDYNAMIC 调用点
+    -- （CallRef：owner 空、NAT name、调用点描述符）与 ATHROW + 异常表折成
+    -- Method.handlers（ExRange：pc 边界 + catch 类型，空 = catch-all），引擎
+    -- AThrow 区间派发（catch-all 恒派发；具名 catch 堆类名精确相等，无类层次
+    -- 面，未知一律 Bail）。依赖面不变：libjbc >=0.4.24 仅挂 jbc 桥面。2026-11-12
 
     add_configs("jbc", {description = "Declare the jsim-jbc bridge face (ext/jsim/jbc.hpp) with its libjbc dependency; default false = core + str/num/reflect/indy headers only, zero package deps.", default = false, type = "boolean"})
 
