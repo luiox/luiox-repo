@@ -9,7 +9,7 @@
 --
 -- 链接说明：整包单库（links = libjhasm）。后端依赖按版本分支：0.0.x =
 -- libjblw → libjbytecode（链接层传递链）；0.3.0 起 = libjbc（后端整体切
--- 换，libjblw/libjbytecode 退役）。公开头另含 libca 头——传导全靠 deps，
+-- 换，libjblw/libjbytecode 退役）。公开头另含 libca 头，传导全靠 deps，
 -- 缺任一在消费方编译/链接期炸 C1083/LNK2019。libca modules 取 luiox 家族
 -- 统一超集（同一消费图内各包的 libca 配置必须一致，否则报 conflict
 -- configs）。

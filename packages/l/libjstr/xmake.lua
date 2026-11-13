@@ -28,8 +28,8 @@ package("libjstr")
     add_versions("0.0.2", "feff166688838ef5e8469ca34a5fb5bbd88059fb") -- libca 0.0.14 2026-10-11
     -- 0.0.3 = strict UTF-8 解码边界修复（C0/C1 overlong 与 F5-F7 越界 lead 拒绝、
     -- 截断独立报 kUnexpectedEnd、validate 恒按 strict）+ unittest 16 个边界用例 +
-    -- README 门面重写；libca 锁 0.0.16。错误码分类变化见上游 design.md「错误分类」
-    -- 节：UTF-8 截断自 kInvalidUtf8Sequence 改报 kUnexpectedEnd。
+    -- README 门面重写；libca 锁 0.0.16。错误码分类变化见上游 design.md 的错误分类
+    -- 一节：UTF-8 截断自 kInvalidUtf8Sequence 改报 kUnexpectedEnd。
     add_versions("0.0.3", "d887e154ddb71c2ae9d7b134e04b014185178bd0") -- strict 解码边界 + libca 0.0.16 2026-10-19
     -- 0.0.4 = 审计修正 + JVM String 码元桥：校验错误分类精确化（UTF-8/MUTF-8
     -- 两侧区分 kInvalidUtf8Sequence / kInvalidMutf8Sequence，截断报 kUnexpectedEnd）、

@@ -58,7 +58,7 @@ package("libjdk_finder")
         assert(package:has_cxxincludes("jdk_finder/jdk_finder.hpp", {configs = {languages = "cxx17"}}))
         -- 链接级自检：调用主入口（只验可用性结构，不 Assert 环境真有 JDK），
         -- 强制解析 libjdk_finder 符号链（缺传递依赖即在此暴露）。
-        -- 0.1.0 起 API 改 snake_case（破坏性），旧版本仍是 camelCase——
+        -- 0.1.0 起 API 改 snake_case（破坏性），旧版本仍是 camelCase，
         -- 探针按版本分支，共用探针会让 0.0.x 在全新环境安装期必挂
         -- （本地包缓存早于探针改动时被掩盖，CI 首装才暴露）。
         if package:version():ge("0.1.0") then

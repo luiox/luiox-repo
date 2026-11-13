@@ -9,12 +9,12 @@
 -- 安装时合并进单一 include/jsim/ 根（on_load 显式声明 includedirs 用法，
 -- 见下）。
 --
--- 依赖说明：核心零依赖红线（libjsim 设计 §9，src/jsim 纯 std 头文件）——
+-- 依赖说明：核心零依赖红线（libjsim 设计 §9，src/jsim 纯 std 头文件），
 -- 核心与 str/num/reflect/indy 扩展不进任何包依赖；唯一外部依赖 libjbc 只挂
 -- jsim-jbc 桥面（ext/jsim/jbc.hpp，jbc/ir 会话面 + jbc/core Op），包级经
 -- jbc config 显式开闸（默认 false）。极性纪律同 micon 词条：xmake configs
 -- 显式传 false 不传导（等价未设置→取默认），需要显式选择的一侧必须做成
--- true，故「桥面开」= configs {jbc = true}，「core-only 零依赖」= 默认不传。
+-- true，故桥面开 = configs {jbc = true}，core-only 零依赖 = 默认不传。
 -- 版本取裸下界 >=0.4.24 对齐 libjsim 源仓实钉，家族 libjbc 升版不被钉死。
 --
 -- 许可：源仓暂无 LICENSE 文件，set_license 暂缺（上游落地后随词条补）。

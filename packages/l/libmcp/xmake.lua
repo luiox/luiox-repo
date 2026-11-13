@@ -34,7 +34,7 @@ package("libmcp")
     -- 自钉路线）：包定义不声明 modules 时，无 requireconf 的消费方会按 libca
     -- 包默认解析，与家族其余包的嵌套 libca 配置不一致，一个依赖图出现两个
     -- libca 实例（链接闭包多条 -libpath，裸名 libca_*.lib 按排序落错实例）。
-    -- 有项目级归并需求的消费方（如 morpher 的 **.libca override）不受影响：
+    -- 有项目级归并需求的消费方（**.libca override）不受影响：
     -- requireconf override 语义优先于包定义声明。
     add_deps("libca >=0.0.7", {public = true, configs = {modules = "core,crypto,str,fs,env,io,json,net,http,process,opt,thread,log,zip,resources,i18n,test"}})
 

@@ -37,7 +37,7 @@ package("libjbc")
     add_versions("0.4.17", "2a44a3749d4cbca04a6221c37b78a56d4620d254") -- v0.4.17 发版（tag 同 commit）  2026-10-20
     -- 0.4.18 = MethodEditor（从零建方法门面，PR #9）+ MethodParameters 接收者行放行（PR #11）。
     add_versions("0.4.18", "ada334a12ec875ca9769bd5d4cb1f7e8494d2ebd") -- PR #11 合入 main 头  2026-10-26
-    -- 0.4.23 = 仓库瘦身定版（PR #20）：docs/design.md 重写为现状真源、注释清批次号与死指针、class_build_attrs_test 收编（此前 xmake.lua 引用未入库文件，新克隆编不出 unittest）。
+    -- 0.4.23 = 仓库瘦身定版（PR #20）：docs/design.md 重写为现状真源、注释清理与死指针、class_build_attrs_test 收编（此前 xmake.lua 引用未入库文件，新克隆编不出 unittest）。
     add_versions("0.4.23", "4228cf3650b2409a106511a3cf8ca7275ed5ed04") -- PR #21 合入 main 头  2026-10-29
     -- 0.4.24 = 依赖统一（PR #22）：libca 0.0.13 → 0.0.16（modules 超集不变；单测 505 例 A/B 与 0.0.13 基线逐例一致）。
     add_versions("0.4.24", "f14fc9ab0ac675ba27552111ee07f6c9c9f1d763") -- PR #22 合入 main 头  2026-10-30
@@ -49,11 +49,11 @@ package("libjbc")
     -- 运行对比轴实测 VerifyError 抓出）；补 StrictFrameTest.LdcClassConstantLoadsClassObject 锁行为。
     add_versions("0.4.27", "0c54fc2ccd7734bffb0a5d1188e9fafcf0f9eff3") -- fix 提交直上 main  2026-11-09
     -- 0.4.28 = Strict 帧重算对异常处理器区间的三个兼容缺口修复：① 发射域回到 try 范围内全部可达
-    -- 指令——HotSpot 对 handler 入口逐指令合并，原先只记会抛异常的指令，改写产物帧表缺条目 →
+    -- 指令：HotSpot 对 handler 入口逐指令合并，原先只记会抛异常的指令，改写产物帧表缺条目 →
     -- 类加载 VerifyError（Current Frame bci 指向区间内不抛异常的指令，报错即证据）；② 两条控制流
-    -- 边同槽类型冲突（int×Ref / Null×原始类型）由「算失败」改为吸收为 Bottom 标记——HotSpot/ZKM
-    -- 语义是标记该槽不可用继续走；③ Bottom 槽序列化为 top_variable_info——verifier 没有「冲突」
-    -- 类型，top 即「该槽不可用」，ZKM 原罐对同类汇合槽就声明 top。
+    -- 边同槽类型冲突（int×Ref / Null×原始类型）由算失败改为吸收为 Bottom 标记，HotSpot/ZKM
+    -- 语义是标记该槽不可用继续走；③ Bottom 槽序列化为 top_variable_info，verifier 没有冲突
+    -- 类型，top 即该槽不可用，ZKM 原罐对同类汇合槽就声明 top。
     -- 消费仓实测：intonly 28/28 全折、矩阵 11 罐 PARITY 全绿。完整说明见 libjbc 提交本身。
     add_versions("0.4.28", "69dacb4e4ea6d5bed9ce985fb630ab114da544c2") -- 2026-11-11
 
@@ -69,7 +69,7 @@ package("libjbc")
             package:add("cxxflags", "/std:c++17")
             -- 公开头含 UTF-8 中文注释，on_test 探针（has_cxxincludes/
             -- check_cxxsnippets 只吃这里的 cxxflags）在 GBK ACP 机器上按 GBK
-            -- 读源会把注释吞行致 C2059 级联，安装失败——必须显式 /utf-8。
+            -- 读源会把注释吞行致 C2059 级联，安装失败，必须显式 /utf-8。
             package:add("cxxflags", "/utf-8")
         else
             package:add("cxxflags", "-std=c++17")

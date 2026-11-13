@@ -10,7 +10,7 @@
 --
 -- 链接说明（静态库）：fork 的 DuiLib target 仅 shared 形态声明 add_syslinks，
 -- 静态形态的系统依赖由本包按平台补齐（未用到的系统库由链接器自行裁剪，
--- 无副作用）。消费方须自行定义 UNICODE/_UNICODE/UILIB_STATIC——UIlib.h 按
+-- 无副作用）。消费方须自行定义 UNICODE/_UNICODE/UILIB_STATIC，UIlib.h 按
 -- UILIB_STATIC 选择导入语义，fork 只在 target 内部定义该宏，不对外传导。
 --
 -- ATL 门控：no_activex / no_imageboxex 透传 fork 的 DUILIB_NO_* 配置。
@@ -26,7 +26,7 @@ package("duilib")
 
     -- 语义版本名 + 锁定 fork commit。版本条目只追加、不修改。
     -- 0.1.0 = 首个入包基线（mlaunch submodule 指针快照 03c53b2：pugixml 独立
-    -- TU / nanosvg 接线 / ATL 门控收口态）。
+    -- TU / nanosvg 接入 / ATL 门控收口态）。
     add_versions("0.1.0", "03c53b2ac73dbad25427b92eedd3d02112457ded")
 
     add_configs("no_activex", {description = "Define DUILIB_NO_ACTIVEX and exclude UIFlash/UIWebBrowser (ATL-free build).", default = false, type = "boolean"})
@@ -36,7 +36,7 @@ package("duilib")
     if is_plat("windows", "mingw") then
         add_syslinks("User32", "Gdi32", "Comctl32", "Ole32", "OleAut32", "Imm32", "Winmm", "Version", "Uxtheme", "Advapi32", "Shell32", "Dwmapi")
         -- compat.h 的 Win32 分支由自定义宏 WIN32（非编译器预定义的 _WIN32）守卫，
-        -- UIlib.h 按 UILIB_STATIC 选择导入语义——这些宏作为公开 define 随包传导，
+        -- UIlib.h 按 UILIB_STATIC 选择导入语义，这些宏作为公开 define 随包传导，
         -- 消费方重复定义同值宏无副作用。
         add_defines("WIN32", "WINDOWS", "UNICODE", "_UNICODE", "UILIB_STATIC")
     end
