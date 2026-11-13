@@ -32,7 +32,7 @@ package("uikit")
     -- 二批 8839565：uikit 顶层命名空间（无 UI 后缀）+ 默认直角令牌
     --   （radius_* 归零）+ Switch/Slider/ComboBox/SpinBox/Toast；
     -- 三批 86c1546+7bfb8e5+5cb3134：TabControl/Menu/Tooltip/DatePicker；
-    -- 0141126（PR#5）：FrameWindow——标题栏 + 最小化/最大化/关闭自绘钮的
+    -- 0141126（PR#5）：FrameWindow：标题栏 + 最小化/最大化/关闭自绘钮的
     --   完整无边框窗预制件，最大化 NC 框厚修正。
     add_versions("0.2.0", "0141126727c49df4547273d32cf529f801b9d2d1")
 

@@ -1,9 +1,9 @@
 # luiox-repo
 
-luiox 自研库的 xmake **包定义仓**（package definitions only）。库源码不在本仓——
-各库来自它自己的 git 仓库；本仓只回答「有哪些版本、怎么构建安装」。
+luiox 自研库的 xmake **包定义仓**（package definitions only）。库源码不在本仓，
+各库来自它自己的 git 仓库；本仓只回答有哪些版本、怎么构建安装。
 
-## 消费方接线
+## 消费方接入
 
 项目级（写进消费项目的 `xmake.lua`，xmake 首次配置时自动克隆本仓）：
 

@@ -12,7 +12,7 @@
 -- （既有条目只追加不修改）；消费项目自行择机升级。
 --
 -- 链接说明：整包单库（links = libjblw）。实现引用 libjbytecode 符号，
--- 公开头包含 libca/core/tag_cast.hpp——两条传导都靠下方 add_deps，缺任一
+-- 公开头包含 libca/core/tag_cast.hpp，两条传导都靠下方 add_deps，缺任一
 -- 在消费方编译/链接期炸 C1083/LNK2019。libca modules 取 luiox 家族统一
 -- 超集（同一消费图内各包的 libca 配置必须一致，否则报 conflict configs）。
 

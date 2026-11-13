@@ -75,7 +75,7 @@ package("libca")
     add_versions("0.0.16", "38deb16fe1fc97ee00e5bea3d38ee06a1b12874d") -- fs 读 stdio + SHA-3 重写 2026-10-19
 
     -- libca_str 的 format.hpp 在公开头里包含 fmt/core.h，str 以 fmt(header-only)
-    -- 为公开接口依赖——包必须传递声明，消费方才能拿到 fmt 的包含路径。
+    -- 为公开接口依赖，包必须传递声明，消费方才能拿到 fmt 的包含路径。
     add_deps("fmt", {configs = {header_only = true}})
 
     add_configs("zip", {description = "Enable libca.zip module (pulls zlib).", default = true, type = "boolean"})
@@ -224,7 +224,7 @@ package("libca")
         end
         -- 链接级自检（net）：取 interface_list 地址，强制解析 libca_net 的
         -- sock_util.obj 符号（引用 Ws2_32/Iphlpapi）。包 syslinks 补齐清单缺失时
-        -- 安装期即失败，防再发  类「库装上了、消费方链接炸」回归。
+        -- 安装期即失败，防再发"库装上了、消费方链接炸"这类回归。
         -- net 模块头 sock_util.hpp 自 0.0.8（libca 560d263）才存在，对更早的
         -- 锁定版本此自检会在 on_test 编译期直接打死，按版本门控（评审 R7）。
         if package:version():ge("0.0.8") then

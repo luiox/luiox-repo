@@ -7,7 +7,7 @@
 -- 发版/升级：在 libjninfra 仓库定版后，于此文件 add_versions 追加新版本条目
 -- （既有条目只追加不修改，见 README 可复现纪律）；消费项目自行择机升级。
 --
--- 链接说明：整包单库（links = libjninfra）。公开头为 JNI/JVMTI 面——签名里
+-- 链接说明：整包单库（links = libjninfra）。公开头为 JNI/JVMTI 面，签名里
 -- 出现 jint/jvmtiError，jni.h/jvmti.h 由 libjninfra 0.0.2 起按 dev-only 声明
 -- （绝对路径 include 经包安装导出会粘进 installdir 形成非法路径），消费方
 -- target 须自带 JAVA_HOME include（JNI 库的本分）。libca 依赖按家族统一
