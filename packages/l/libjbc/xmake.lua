@@ -56,6 +56,11 @@ package("libjbc")
     -- 类型，top 即该槽不可用，ZKM 原罐对同类汇合槽就声明 top。
     -- 消费仓实测：intonly 28/28 全折、矩阵 11 罐 PARITY 全绿。完整说明见 libjbc 提交本身。
     add_versions("0.4.28", "69dacb4e4ea6d5bed9ce985fb630ab114da544c2") -- 2026-11-11
+    -- 0.4.29 = 常量池压缩放行 SourceDebugExtension 属性。这属性按 JVM 规范就是一段给
+    -- 调试器看的纯文本，里面不含常量池引用。此前压缩器不认它，凡带这属性的类整类拒绝
+    -- 清理——Grunt 恰好爱往里塞几 MB 的垃圾（260705 语料 79 类中招），这些类的死代码
+    -- 普查/清理全部停摆。现在属性原样保留，类内其余死条目照常清走。单测覆盖两面。
+    add_versions("0.4.29", "ac8387625b22c55003676e04a93755db065c0e62") -- 2026-11-17
 
     -- libca modules 对齐消费项目（mjbase/mjt）LUIOX_LIBCA_MODULES 家族统一
     -- 超集：包定义 add_deps 不吃消费方 requireconfs（实测），更小模块集会让
